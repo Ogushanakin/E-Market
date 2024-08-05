@@ -58,11 +58,25 @@ class HomeViewController: UIViewController {
     }
     
     private func fetchMoreData() {
-        homeViewModel.fetchMoreProducts {
+        guard !isLoading else { return }
+        
+        isLoading = true
+        
+        homeViewModel.fetchMoreProducts { [weak self] result in
+            guard let self = self else { return }
+            
             DispatchQueue.main.async {
                 self.isLoading = false
-                self.homeView.collectionView.reloadData()
-                self.homeView.collectionView.finishInfiniteScroll()
+                
+                switch result {
+                case .success:
+                    self.homeView.collectionView.reloadData()
+                    self.homeView.collectionView.finishInfiniteScroll()
+                    
+                case .failure(let error):
+                    print("Failed to fetch more products: \(error.localizedDescription)")
+                    self.homeView.collectionView.finishInfiniteScroll()
+                }
             }
         }
     }
@@ -71,7 +85,6 @@ class HomeViewController: UIViewController {
         homeView.collectionView.addInfiniteScroll { [weak self] _ in
             guard let self = self else { return }
             if !self.isLoading {
-                self.isLoading = true
                 self.fetchMoreData()
             }
         }
@@ -162,9 +175,17 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
 // MARK: - UISearchBarDelegate
 extension HomeViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        homeViewModel.searchProducts(query: searchText) {
-            DispatchQueue.main.async {
-                self.homeView.collectionView.reloadData()
+        homeViewModel.searchProducts(query: searchText) { result in
+            switch result {
+            case .success:
+                DispatchQueue.main.async {
+                    self.homeView.collectionView.reloadData()
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    // Show error message
+                    print("Search failed: \(error.localizedDescription)")
+                }
             }
         }
     }

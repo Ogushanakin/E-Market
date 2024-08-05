@@ -23,10 +23,8 @@ class CartManager {
     func addToCart(item: HomeModel) {
         var currentCart = getCart()
         if let index = currentCart.firstIndex(where: { $0.id == item.id }) {
-            // Increment count if item already exists
             currentCart[index].count += 1
         } else {
-            // Add new item with count 1
             var newItem = item
             newItem.count = 1
             currentCart.append(newItem)
@@ -39,11 +37,9 @@ class CartManager {
     func removeFromCart(item: HomeModel) {
         var currentCart = getCart()
         if let index = currentCart.firstIndex(where: { $0.id == item.id }) {
-            // Eğer miktar 1'den büyükse, miktarı azalt
             if currentCart[index].count > 1 {
                 currentCart[index].count -= 1
             } else {
-                // Miktar 1 ise, ürünü listeden çıkar
                 currentCart.remove(at: index)
             }
             saveCart(cart: currentCart)

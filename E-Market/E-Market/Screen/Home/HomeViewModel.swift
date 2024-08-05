@@ -9,30 +9,42 @@ import Foundation
 
 class HomeViewModel {
     
-    private let productService = ProductService()
+    private let productService = ProductService.shared
     var homeModels: [HomeModel] = []
     
-    func fetchMoreProducts(completion: @escaping () -> Void) {
-        productService.fetchMoreProducts { [weak self] newProducts in
+    // Fetch more products with pagination
+    func fetchMoreProducts(completion: @escaping (Result<Void, Error>) -> Void) {
+        productService.fetchMoreProducts { [weak self] result in
             guard let self = self else {
-                completion()
+                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "ViewModel deallocated"])))
                 return
             }
-            if let newProducts = newProducts {
+            
+            switch result {
+            case .success(let newProducts):
                 self.homeModels.append(contentsOf: newProducts)
+                completion(.success(()))
+            case .failure(let error):
+                completion(.failure(error))
             }
-            completion()
         }
     }
     
-    func searchProducts(query: String, completion: @escaping () -> Void) {
-        productService.searchProducts(query: query) { [weak self] products in
+    // Search products with a query
+    func searchProducts(query: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        productService.searchProducts(query: query) { [weak self] result in
             guard let self = self else {
-                completion()
+                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "ViewModel deallocated"])))
                 return
             }
-            self.homeModels = products ?? []
-            completion()
+            
+            switch result {
+            case .success(let products):
+                self.homeModels = products
+                completion(.success(()))
+            case .failure(let error):
+                completion(.failure(error))
+            }
         }
     }
 }

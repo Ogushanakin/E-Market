@@ -34,6 +34,8 @@
 		214CC8152C6182FD002ED61D /* CartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214CC8142C6182FD002ED61D /* CartViewModel.swift */; };
 		214CC8172C61830D002ED61D /* CartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214CC8162C61830D002ED61D /* CartView.swift */; };
 		214CC81A2C618516002ED61D /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214CC8192C618516002ED61D /* UIView+Extension.swift */; };
+		214CC81C2C619B9B002ED61D /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214CC81B2C619B9B002ED61D /* UIViewController+Extension.swift */; };
+		214CC81E2C619C10002ED61D /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214CC81D2C619C10002ED61D /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +85,8 @@
 		214CC8142C6182FD002ED61D /* CartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewModel.swift; sourceTree = "<group>"; };
 		214CC8162C61830D002ED61D /* CartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartView.swift; sourceTree = "<group>"; };
 		214CC8192C618516002ED61D /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		214CC81B2C619B9B002ED61D /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		214CC81D2C619C10002ED61D /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,8 +216,9 @@
 		214CC7D42C612F8E002ED61D /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				214CC7E12C613A06002ED61D /* ProductService.swift */,
+				214CC81F2C619DFD002ED61D /* Service */,
 				214CC8072C61550E002ED61D /* CartManager.swift */,
+				214CC81D2C619C10002ED61D /* NetworkManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -271,8 +276,17 @@
 			isa = PBXGroup;
 			children = (
 				214CC8192C618516002ED61D /* UIView+Extension.swift */,
+				214CC81B2C619B9B002ED61D /* UIViewController+Extension.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		214CC81F2C619DFD002ED61D /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				214CC7E12C613A06002ED61D /* ProductService.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -417,6 +431,7 @@
 				214CC7A72C612BE9002ED61D /* E_Market.xcdatamodeld in Sources */,
 				214CC80F2C615EE0002ED61D /* DetailView.swift in Sources */,
 				214CC7DC2C613179002ED61D /* ProductTableViewCell.swift in Sources */,
+				214CC81E2C619C10002ED61D /* NetworkManager.swift in Sources */,
 				214CC80A2C615B07002ED61D /* HomeView.swift in Sources */,
 				214CC79D2C612BE9002ED61D /* AppDelegate.swift in Sources */,
 				214CC8152C6182FD002ED61D /* CartViewModel.swift in Sources */,
@@ -431,6 +446,7 @@
 				214CC7F32C61535C002ED61D /* TabBarViewController.swift in Sources */,
 				214CC7DA2C612FE3002ED61D /* HomeModel.swift in Sources */,
 				214CC8172C61830D002ED61D /* CartView.swift in Sources */,
+				214CC81C2C619B9B002ED61D /* UIViewController+Extension.swift in Sources */,
 				214CC81A2C618516002ED61D /* UIView+Extension.swift in Sources */,
 				214CC80D2C615DF5002ED61D /* DetailViewModel.swift in Sources */,
 			);
