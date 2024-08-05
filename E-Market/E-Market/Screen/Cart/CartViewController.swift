@@ -6,85 +6,63 @@
 //
 
 import UIKit
-import SnapKit
 
 class CartViewController: UIViewController {
     
-    let tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.register(ProductTableViewCell.self, forCellReuseIdentifier: "productCell")
-        tableView.tableFooterView = UIView()
-        return tableView
-    }()
-    
-    let totalLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.textAlignment = .center
-        label.textColor = .black
-        return label
-    }()
+    private let viewModel = CartViewModel()
+    private let cartView = CartView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
-        setupNotificationObserver()
-        updateTotalPrice()
-    }
-    
-    private func setupUI() {
-        view.backgroundColor = .white
-        tableView.backgroundColor = .white
-        view.addSubview(tableView)
-        view.addSubview(totalLabel)
-        
-        tableView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-200) // Düzeltilmiş
+        setupView()
+        setupBindings()
+        viewModel.onCartUpdated = { [weak self] in
+            self?.updateUI()
         }
+        updateUI()
+    }
+    
+    private func setupView() {
+        view.addSubview(cartView)
+        cartView.anchor(top: view.topAnchor,
+                        left: view.leftAnchor,
+                        bottom: view.bottomAnchor,
+                        right: view.rightAnchor)
         
-        totalLabel.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().inset(100) // Düzeltilmiş
-            make.leading.trailing.equalToSuperview().inset(16)
-            make.height.equalTo(44)
-        }
+        cartView.tableView.delegate = self
+        cartView.tableView.dataSource = self
         
-        tableView.delegate = self
-        tableView.dataSource = self
+        // Register the cell class or nib
+        cartView.tableView.register(ProductTableViewCell.self, forCellReuseIdentifier: "productCell")
     }
     
-    private func setupNotificationObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(cartDidUpdate), name: CartManager.shared.cartDidUpdateNotification, object: nil)
+    private func setupBindings() {
+        // No need to set delegate and dataSource here as it's already done in setupView
+        cartView.tableView.reloadData()
     }
     
-    @objc private func cartDidUpdate() {
-        tableView.reloadData()
-        updateTotalPrice()
-    }
-    
-    private func updateTotalPrice() {
-        let total = CartManager.shared.cartItems.reduce(0.0) { result, item in
-            guard let price = Double(item.price ?? "0") else { return result }
-            return result + price * Double(item.count)
-        }
-        totalLabel.text = "Total: $\(String(format: "%.2f", total))"
+    private func updateUI() {
+        cartView.tableView.reloadData()
+        let totalPrice = viewModel.getTotalPrice()
+        cartView.updateTotalPrice(with: totalPrice)
     }
 }
 
 extension CartViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return CartManager.shared.cartItems.count
+        return viewModel.cartItems.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "productCell", for: indexPath) as? ProductTableViewCell else {
-            return UITableViewCell()
+            fatalError("Unable to dequeue ProductTableViewCell")
         }
-        let product = CartManager.shared.cartItems[indexPath.row]
+        let product = viewModel.cartItems[indexPath.row]
         cell.selectionStyle = .none
         cell.configure(with: product)
         return cell
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }

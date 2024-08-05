@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SnapKit
 
 class ProductTableViewCell: UITableViewCell {
 
@@ -15,7 +14,6 @@ class ProductTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 16)
         label.textColor = .black
-        label.sizeToFit()
         return label
     }()
 
@@ -23,7 +21,6 @@ class ProductTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .gray
-        label.sizeToFit()
         return label
     }()
 
@@ -64,38 +61,41 @@ class ProductTableViewCell: UITableViewCell {
     // UI Setup
     private func setupUI() {
         backgroundColor = .white
-        addSubview(nameLabel)
-        addSubview(priceLabel)
-        addSubview(quantityLabel)
+        contentView.addSubview(nameLabel)
+        contentView.addSubview(priceLabel)
+        contentView.addSubview(quantityLabel)
         contentView.addSubview(increaseButton)
         contentView.addSubview(decreaseButton)
 
-        nameLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(8)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
+        nameLabel.anchor(top: contentView.topAnchor,
+                         left: contentView.leftAnchor,
+                         right: contentView.rightAnchor,
+                         paddingTop: 8,
+                         paddingLeft: 16,
+                         paddingRight: 16)
+        
+        priceLabel.anchor(top: nameLabel.bottomAnchor,
+                          left: contentView.leftAnchor,
+                          right: contentView.rightAnchor,
+                          paddingTop: 4,
+                          paddingLeft: 16,
+                          paddingRight: 16)
+        
+        quantityLabel.centerY(inView: contentView)
+        quantityLabel.centerX(inView: contentView)
+        
+        increaseButton.anchor(left: quantityLabel.rightAnchor,
+                              paddingLeft: 8,
+                              width: 50,
+                              height: 50)
+        increaseButton.centerY(inView: quantityLabel)
+        
+        decreaseButton.anchor(right: quantityLabel.leftAnchor,
+                              paddingRight: 8,
+                              width: 50,
+                              height: 50)
+        decreaseButton.centerY(inView: quantityLabel)
 
-        priceLabel.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel.snp.bottom).offset(4)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
-
-        quantityLabel.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.centerX.equalToSuperview().offset(30)
-        }
-
-        increaseButton.snp.makeConstraints { make in
-            make.leading.equalTo(quantityLabel.snp.trailing).offset(8)
-            make.centerY.equalTo(quantityLabel)
-            make.height.width.equalTo(50)
-        }
-
-        decreaseButton.snp.makeConstraints { make in
-            make.trailing.equalTo(quantityLabel.snp.leading).offset(-8)
-            make.centerY.equalTo(quantityLabel)
-            make.height.width.equalTo(50)
-        }
     }
     
     private func setupActions() {
@@ -115,17 +115,17 @@ class ProductTableViewCell: UITableViewCell {
         guard var product = product else { return }
         product.count += 1
         CartManager.shared.addToCart(item: product)
-        configure(with: product) // Güncel verilerle yeniden yapılandır
+        configure(with: product) // Update with new data
     }
 
     @objc private func decreaseQuantity() {
         guard var product = product else { return }
         if product.count > 1 {
             product.count -= 1
-            CartManager.shared.addToCart(item: product)
+            CartManager.shared.removeFromCart(item: product)
         } else {
             CartManager.shared.removeFromCart(item: product)
         }
-        configure(with: product) // Güncel verilerle yeniden yapılandır
+        configure(with: product)
     }
 }
