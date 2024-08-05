@@ -7,7 +7,6 @@
 
 import UIKit
 import SDWebImage
-import SnapKit
 
 protocol ProductCollectionViewCellDelegate: AnyObject {
     func didSelectFavorite(cell: ProductCollectionViewCell)
@@ -68,25 +67,31 @@ class ProductCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(priceLabel)
         contentView.addSubview(addToCartButton)
         
-        productImageView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(150)
-        }
+        productImageView.anchor(top: contentView.topAnchor,
+                                left: contentView.leftAnchor,
+                                right: contentView.rightAnchor,
+                                paddingTop: 0,
+                                paddingLeft: 0,
+                                paddingRight: 0,
+                                height: 150)
         
-        priceLabel.snp.makeConstraints { make in
-            make.top.equalTo(productImageView.snp.bottom).offset(4)
-            make.leading.trailing.equalToSuperview()
-        }
+        priceLabel.anchor(top: productImageView.bottomAnchor,
+                          left: contentView.leftAnchor,
+                          right: contentView.rightAnchor,
+                          paddingTop: 4)
         
-        nameLabel.snp.makeConstraints { make in
-            make.top.equalTo(priceLabel.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview()
-        }
+        nameLabel.anchor(top: priceLabel.bottomAnchor,
+                         left: contentView.leftAnchor,
+                         right: contentView.rightAnchor,
+                         paddingTop: 8)
         
-        addToCartButton.snp.makeConstraints { make in
-            make.height.equalTo(36)
-            make.leading.trailing.bottom.equalToSuperview().inset(10)
-        }
+        addToCartButton.anchor(left: contentView.leftAnchor,
+                               bottom: contentView.bottomAnchor,
+                               right: contentView.rightAnchor,
+                               paddingLeft: 10,
+                               paddingBottom: 10,
+                               paddingRight: 10,
+                               height: 36)
     }
     
     func configure(with model: HomeModel?) {

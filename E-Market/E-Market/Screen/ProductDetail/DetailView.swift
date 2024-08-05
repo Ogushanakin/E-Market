@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SnapKit
 import SDWebImage
 
 class DetailView: UIView {
@@ -17,6 +16,7 @@ class DetailView: UIView {
         imageView.backgroundColor = .lightGray
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
@@ -24,6 +24,7 @@ class DetailView: UIView {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textColor = .black
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -31,6 +32,7 @@ class DetailView: UIView {
         let label = UILabel()
         label.numberOfLines = 0
         label.textColor = .black
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -38,12 +40,14 @@ class DetailView: UIView {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 16
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
     let priceStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
@@ -52,6 +56,7 @@ class DetailView: UIView {
         label.font = UIFont.systemFont(ofSize: 16)
         label.text = "Price:"
         label.textColor = .black
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -59,6 +64,7 @@ class DetailView: UIView {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textColor = .black
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -68,6 +74,7 @@ class DetailView: UIView {
         button.backgroundColor = .blue
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 8
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -96,32 +103,35 @@ class DetailView: UIView {
         priceStackView.addArrangedSubview(priceLabel)
         priceStackView.addArrangedSubview(priceValueLabel)
         
-        // Set constraints using SnapKit
-        imageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(40)
-            make.left.equalToSuperview().offset(20)
-            make.right.equalToSuperview().offset(-20)
-            make.height.equalTo(200)
-        }
+        // Set constraints using anchor method
+        imageView.anchor(top: topAnchor,
+                         left: leftAnchor,
+                         right: rightAnchor,
+                         paddingTop: 40,
+                         paddingLeft: 20,
+                         paddingRight: 20,
+                         height: 200)
         
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(imageView.snp.bottom).offset(20)
-            make.left.equalToSuperview().offset(20)
-            make.right.equalToSuperview().offset(-20)
-        }
+        titleLabel.anchor(top: imageView.bottomAnchor,
+                          left: leftAnchor,
+                          right: rightAnchor,
+                          paddingTop: 20,
+                          paddingLeft: 20,
+                          paddingRight: 20)
         
-        descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(10)
-            make.left.equalToSuperview().offset(20)
-            make.right.equalToSuperview().offset(-20)
-        }
+        descriptionLabel.anchor(top: titleLabel.bottomAnchor,
+                                left: leftAnchor,
+                                right: rightAnchor,
+                                paddingTop: 10,
+                                paddingLeft: 20,
+                                paddingRight: 20)
         
-        horizontalStackView.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(20)
-            make.left.equalToSuperview().offset(20)
-            make.right.equalToSuperview().offset(-20)
-            make.bottom.equalToSuperview().offset(-20)
-        }
+        horizontalStackView.anchor(top: descriptionLabel.bottomAnchor,
+                                    left: leftAnchor,
+                                   bottom: bottomAnchor, right: rightAnchor,
+                                    paddingTop: 20,
+                                    paddingLeft: 20,
+                                   paddingBottom: 20, paddingRight: 20)
     }
     
     func configure(with viewModel: DetailViewModel) {
@@ -137,4 +147,3 @@ class DetailView: UIView {
         addToCartButton.setTitle(viewModel.isInCart ? "Remove from Cart" : "Add to Cart", for: .normal)
     }
 }
-

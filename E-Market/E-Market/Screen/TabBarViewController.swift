@@ -25,6 +25,7 @@ class TabBarController: UITabBarController {
         let favoriteNavController = UINavigationController(rootViewController: favoriteVC)
         let profileNavController = UINavigationController(rootViewController: profileVC)
         
+        homeVC.title = "E-Market"
         homeVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house")?.withTintColor(.systemBlue, renderingMode: .alwaysOriginal))
         cardVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "cart"), selectedImage: UIImage(named: "cart")?.withTintColor(.systemBlue, renderingMode: .alwaysOriginal))
         favoriteVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "favorite"), selectedImage: UIImage(named: "favorite")?.withTintColor(.systemBlue, renderingMode: .alwaysOriginal))

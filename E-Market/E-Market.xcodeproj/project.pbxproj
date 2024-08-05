@@ -24,7 +24,6 @@
 		214CC7F12C6152F5002ED61D /* CartModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214CC7F02C6152F5002ED61D /* CartModel.swift */; };
 		214CC7F32C61535C002ED61D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214CC7F22C61535C002ED61D /* TabBarViewController.swift */; };
 		214CC7F52C615373002ED61D /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214CC7F42C615373002ED61D /* HomeViewController.swift */; };
-		214CC7F82C615393002ED61D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 214CC7F72C615393002ED61D /* SnapKit */; };
 		214CC7FB2C6153F7002ED61D /* UIScrollView_InfiniteScroll in Frameworks */ = {isa = PBXBuildFile; productRef = 214CC7FA2C6153F7002ED61D /* UIScrollView_InfiniteScroll */; };
 		214CC7FD2C615413002ED61D /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214CC7FC2C615413002ED61D /* CartViewController.swift */; };
 		214CC8002C615449002ED61D /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 214CC7FF2C615449002ED61D /* SDWebImage */; };
@@ -93,7 +92,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				214CC7F82C615393002ED61D /* SnapKit in Frameworks */,
 				214CC7EC2C61490B002ED61D /* Kingfisher in Frameworks */,
 				214CC7E52C613A42002ED61D /* Alamofire in Frameworks */,
 				214CC7FB2C6153F7002ED61D /* UIScrollView_InfiniteScroll in Frameworks */,
@@ -173,6 +171,7 @@
 				214CC7D12C612F50002ED61D /* Delegate */,
 				214CC8132C6178C1002ED61D /* Resources */,
 				214CC7D42C612F8E002ED61D /* Managers */,
+				214CC7D32C612F6A002ED61D /* Model */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -217,7 +216,6 @@
 		214CC7D42C612F8E002ED61D /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				214CC7D32C612F6A002ED61D /* Model */,
 				214CC7E12C613A06002ED61D /* ProductService.swift */,
 				214CC8072C61550E002ED61D /* CartManager.swift */,
 			);
@@ -228,8 +226,8 @@
 			isa = PBXGroup;
 			children = (
 				214CC8012C615453002ED61D /* DetailViewController.swift */,
-				214CC80E2C615EE0002ED61D /* DetailView.swift */,
 				214CC80C2C615DF5002ED61D /* DetailViewModel.swift */,
+				214CC80E2C615EE0002ED61D /* DetailView.swift */,
 			);
 			path = ProductDetail;
 			sourceTree = "<group>";
@@ -237,10 +235,10 @@
 		214CC80B2C615C1E002ED61D /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				214CC8102C616366002ED61D /* Cell */,
 				214CC7F42C615373002ED61D /* HomeViewController.swift */,
-				214CC8092C615B07002ED61D /* HomeView.swift */,
 				214CC8052C6154C2002ED61D /* HomeViewModel.swift */,
+				214CC8092C615B07002ED61D /* HomeView.swift */,
+				214CC8102C616366002ED61D /* Cell */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -300,7 +298,6 @@
 			packageProductDependencies = (
 				214CC7E42C613A42002ED61D /* Alamofire */,
 				214CC7EB2C61490B002ED61D /* Kingfisher */,
-				214CC7F72C615393002ED61D /* SnapKit */,
 				214CC7FA2C6153F7002ED61D /* UIScrollView_InfiniteScroll */,
 				214CC7FF2C615449002ED61D /* SDWebImage */,
 			);
@@ -379,7 +376,6 @@
 			packageReferences = (
 				214CC7E32C613A42002ED61D /* XCRemoteSwiftPackageReference "Alamofire" */,
 				214CC7EA2C61490B002ED61D /* XCRemoteSwiftPackageReference "Kingfisher" */,
-				214CC7F62C615393002ED61D /* XCRemoteSwiftPackageReference "SnapKit" */,
 				214CC7F92C6153F7002ED61D /* XCRemoteSwiftPackageReference "UIScrollView-InfiniteScroll" */,
 				214CC7FE2C615449002ED61D /* XCRemoteSwiftPackageReference "SDWebImage" */,
 			);
@@ -801,14 +797,6 @@
 				minimumVersion = 7.12.0;
 			};
 		};
-		214CC7F62C615393002ED61D /* XCRemoteSwiftPackageReference "SnapKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.7.1;
-			};
-		};
 		214CC7F92C6153F7002ED61D /* XCRemoteSwiftPackageReference "UIScrollView-InfiniteScroll" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pronebird/UIScrollView-InfiniteScroll.git";
@@ -837,11 +825,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 214CC7EA2C61490B002ED61D /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
-		};
-		214CC7F72C615393002ED61D /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 214CC7F62C615393002ED61D /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
 		};
 		214CC7FA2C6153F7002ED61D /* UIScrollView_InfiniteScroll */ = {
 			isa = XCSwiftPackageProductDependency;

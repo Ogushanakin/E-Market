@@ -22,17 +22,21 @@ class HomeViewController: UIViewController {
         fetchMoreData()
         setupInfiniteScroll()
         setupCartUpdateObserver()
+        configureNavBar()
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateBadgeValue()
     }
 
     private func setupView() {
+        view.backgroundColor = .white
         view.addSubview(homeView)
-        homeView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        homeView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                        left: view.leftAnchor,
+                        bottom: view.bottomAnchor,
+                        right: view.rightAnchor)
         
         homeView.collectionView.dataSource = self
         homeView.collectionView.delegate = self
@@ -40,6 +44,12 @@ class HomeViewController: UIViewController {
         
         homeView.filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         homeView.searchBar.delegate = self
+    }
+    
+    private func configureNavBar() {
+        navigationController?.navigationBar.backgroundColor = .systemBlue
+        navigationController?.isNavigationBarHidden = false
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
     
     private func setupBindings() {
@@ -127,7 +137,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth = collectionView.bounds.width / 2 - 30
+        let cellWidth = (collectionView.bounds.width - 60) / 2
         let cellHeight: CGFloat = 300
         return CGSize(width: cellWidth, height: cellHeight)
     }

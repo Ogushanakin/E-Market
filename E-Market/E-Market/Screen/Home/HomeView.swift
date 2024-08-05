@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SnapKit
 
 class HomeView: UIView {
     
@@ -14,19 +13,27 @@ class HomeView: UIView {
     let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Search"
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        searchBar.barTintColor = .white
+        searchBar.barStyle = .black
         return searchBar
     }()
     
     let filterLabel: UILabel = {
         let label = UILabel()
         label.text = "Filters:"
+        label.textColor = .black
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     let filterButton: UIButton = {
         let button = UIButton()
         button.setTitle("Select Filter", for: .normal)
-        button.setTitleColor(.blue, for: .normal)
+        button.setTitleColor(.darkGray, for: .normal)
+        button.backgroundColor = .lightGray
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.anchor(width: 140, height: 40)
         return button
     }()
     
@@ -35,6 +42,7 @@ class HomeView: UIView {
         stackView.axis = .horizontal
         stackView.spacing = 8
         stackView.backgroundColor = .white
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
@@ -43,6 +51,7 @@ class HomeView: UIView {
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .white
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
     
@@ -56,6 +65,7 @@ class HomeView: UIView {
     }
     
     private func setupUI() {
+        backgroundColor = .white
         addSubview(searchBar)
         addSubview(horizontalStackView)
         addSubview(collectionView)
@@ -63,20 +73,24 @@ class HomeView: UIView {
         horizontalStackView.addArrangedSubview(filterLabel)
         horizontalStackView.addArrangedSubview(filterButton)
         
-        searchBar.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide.snp.top)
-            make.leading.trailing.equalToSuperview()
-        }
+        searchBar.anchor(top: safeAreaLayoutGuide.topAnchor,
+                         left: leftAnchor,
+                         right: rightAnchor,
+                         paddingTop: 0,
+                         paddingLeft: 0,
+                         paddingRight: 0)
         
-        horizontalStackView.snp.makeConstraints { make in
-            make.top.equalTo(searchBar.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
+        horizontalStackView.anchor(top: searchBar.bottomAnchor,
+                                   left: leftAnchor,
+                                   right: rightAnchor,
+                                   paddingTop: 8,
+                                   paddingLeft: 16,
+                                   paddingRight: 16)
         
-        collectionView.snp.makeConstraints { make in
-            make.top.equalTo(horizontalStackView.snp.bottom).offset(8)
-            make.leading.trailing.bottom.equalToSuperview()
-        }
+        collectionView.anchor(top: horizontalStackView.bottomAnchor,
+                              left: leftAnchor,
+                              bottom: bottomAnchor,
+                              right: rightAnchor,
+                              paddingTop: 8)
     }
 }
-

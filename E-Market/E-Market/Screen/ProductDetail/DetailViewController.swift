@@ -32,10 +32,11 @@ class DetailViewController: UIViewController, DetailViewModelDelegate {
     private func setupUI() {
         view.addSubview(detailView)
         
-        // Set constraints using SnapKit
-        detailView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
-        }
+        // Set constraints using anchor method
+        detailView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                          left: view.safeAreaLayoutGuide.leftAnchor,
+                          bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                          right: view.safeAreaLayoutGuide.rightAnchor)
         
         // Add target for button action
         detailView.addToCartButton.addTarget(self, action: #selector(addToCartButtonTapped), for: .touchUpInside)
