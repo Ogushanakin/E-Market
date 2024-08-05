@@ -24,6 +24,7 @@ class DetailView: UIView {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textColor = .black
+        label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -40,6 +41,7 @@ class DetailView: UIView {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 16
+        stackView.alignment = .center
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -47,6 +49,7 @@ class DetailView: UIView {
     let priceStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
+        stackView.spacing = 4
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -104,46 +107,44 @@ class DetailView: UIView {
         priceStackView.addArrangedSubview(priceValueLabel)
         
         // Set constraints using anchor method
-        imageView.anchor(top: topAnchor,
-                         left: leftAnchor,
-                         right: rightAnchor,
-                         paddingTop: 40,
-                         paddingLeft: 20,
-                         paddingRight: 20,
-                         height: 200)
-        
-        titleLabel.anchor(top: imageView.bottomAnchor,
-                          left: leftAnchor,
-                          right: rightAnchor,
-                          paddingTop: 20,
-                          paddingLeft: 20,
-                          paddingRight: 20)
-        
-        descriptionLabel.anchor(top: titleLabel.bottomAnchor,
-                                left: leftAnchor,
-                                right: rightAnchor,
-                                paddingTop: 10,
-                                paddingLeft: 20,
-                                paddingRight: 20)
-        
-        horizontalStackView.anchor(top: descriptionLabel.bottomAnchor,
-                                    left: leftAnchor,
-                                   bottom: bottomAnchor, right: rightAnchor,
-                                    paddingTop: 20,
-                                    paddingLeft: 20,
-                                   paddingBottom: 20, paddingRight: 20)
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: topAnchor, constant: 40),
+            imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            imageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            imageView.heightAnchor.constraint(equalToConstant: 200),
+            
+            titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            
+            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
+            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            
+            horizontalStackView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
+            horizontalStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            horizontalStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            horizontalStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)
+        ])
     }
     
     func configure(with viewModel: DetailViewModel) {
+        // Load image asynchronously
         if let imageUrl = URL(string: viewModel.productImageUrl) {
-            imageView.sd_setImage(with: imageUrl, placeholderImage: UIImage(named: "placeholder"))
+            imageView.sd_setImage(with: imageUrl, placeholderImage: UIImage(named: "placeholder")) { [weak self] image, error, cacheType, url in
+                if let error = error {
+                    print("Failed to load image: \(error.localizedDescription)")
+                }
+            }
         } else {
             imageView.image = UIImage(named: "placeholder")
         }
         
+        // Configure labels and button
         titleLabel.text = viewModel.productName
         descriptionLabel.text = viewModel.productDescription
         priceValueLabel.text = viewModel.productPrice
         addToCartButton.setTitle(viewModel.isInCart ? "Remove from Cart" : "Add to Cart", for: .normal)
     }
+
 }

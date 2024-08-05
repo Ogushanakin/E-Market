@@ -19,8 +19,6 @@
 		214CC7DC2C613179002ED61D /* ProductTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214CC7DB2C613179002ED61D /* ProductTableViewCell.swift */; };
 		214CC7DE2C613366002ED61D /* ProductCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214CC7DD2C613366002ED61D /* ProductCollectionViewCell.swift */; };
 		214CC7E22C613A07002ED61D /* ProductService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214CC7E12C613A06002ED61D /* ProductService.swift */; };
-		214CC7E52C613A42002ED61D /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 214CC7E42C613A42002ED61D /* Alamofire */; };
-		214CC7EC2C61490B002ED61D /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 214CC7EB2C61490B002ED61D /* Kingfisher */; };
 		214CC7F12C6152F5002ED61D /* CartModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214CC7F02C6152F5002ED61D /* CartModel.swift */; };
 		214CC7F32C61535C002ED61D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214CC7F22C61535C002ED61D /* TabBarViewController.swift */; };
 		214CC7F52C615373002ED61D /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214CC7F42C615373002ED61D /* HomeViewController.swift */; };
@@ -92,8 +90,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				214CC7EC2C61490B002ED61D /* Kingfisher in Frameworks */,
-				214CC7E52C613A42002ED61D /* Alamofire in Frameworks */,
 				214CC7FB2C6153F7002ED61D /* UIScrollView_InfiniteScroll in Frameworks */,
 				214CC8002C615449002ED61D /* SDWebImage in Frameworks */,
 			);
@@ -296,8 +292,6 @@
 			);
 			name = "E-Market";
 			packageProductDependencies = (
-				214CC7E42C613A42002ED61D /* Alamofire */,
-				214CC7EB2C61490B002ED61D /* Kingfisher */,
 				214CC7FA2C6153F7002ED61D /* UIScrollView_InfiniteScroll */,
 				214CC7FF2C615449002ED61D /* SDWebImage */,
 			);
@@ -374,8 +368,6 @@
 			);
 			mainGroup = 214CC7902C612BE9002ED61D;
 			packageReferences = (
-				214CC7E32C613A42002ED61D /* XCRemoteSwiftPackageReference "Alamofire" */,
-				214CC7EA2C61490B002ED61D /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				214CC7F92C6153F7002ED61D /* XCRemoteSwiftPackageReference "UIScrollView-InfiniteScroll" */,
 				214CC7FE2C615449002ED61D /* XCRemoteSwiftPackageReference "SDWebImage" */,
 			);
@@ -781,22 +773,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		214CC7E32C613A42002ED61D /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.9.1;
-			};
-		};
-		214CC7EA2C61490B002ED61D /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 7.12.0;
-			};
-		};
 		214CC7F92C6153F7002ED61D /* XCRemoteSwiftPackageReference "UIScrollView-InfiniteScroll" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pronebird/UIScrollView-InfiniteScroll.git";
@@ -816,16 +792,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		214CC7E42C613A42002ED61D /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 214CC7E32C613A42002ED61D /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
-		};
-		214CC7EB2C61490B002ED61D /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 214CC7EA2C61490B002ED61D /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
-		};
 		214CC7FA2C6153F7002ED61D /* UIScrollView_InfiniteScroll */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 214CC7F92C6153F7002ED61D /* XCRemoteSwiftPackageReference "UIScrollView-InfiniteScroll" */;

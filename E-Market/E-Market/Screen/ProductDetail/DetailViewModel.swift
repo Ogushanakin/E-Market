@@ -14,28 +14,43 @@ protocol DetailViewModelDelegate: AnyObject {
 
 class DetailViewModel {
     // Properties
-    let productImageUrl: String
-    let productName: String
-    let productDescription: String
-    let productPrice: String
-    var isInCart: Bool
+    let product: HomeModel
+    var isInCart: Bool {
+        didSet {
+            let buttonTitle = isInCart ? "Remove from Cart" : "Add to Cart"
+            delegate?.didUpdateButtonTitle(buttonTitle)
+        }
+    }
+    
+    // Computed properties for easy access
+    var productImageUrl: String { product.image ?? "" }
+    var productName: String { product.name ?? "" }
+    var productDescription: String { product.description ?? "" }
+    var productPrice: String { "\(product.price ?? "0")₺" }
     
     // Delegate
     weak var delegate: DetailViewModelDelegate?
     
     // Initializer
     init(product: HomeModel, isInCart: Bool) {
-        self.productImageUrl = product.image ?? ""
-        self.productName = product.name!
-        self.productDescription = product.description!
-        self.productPrice = "\(String(describing: product.price))₺"
+        self.product = product
         self.isInCart = isInCart
     }
     
     func toggleCartStatus() {
         isInCart.toggle()
-        // Notify delegate about the change
-        let buttonTitle = isInCart ? "Remove from Cart" : "Add to Cart"
-        delegate?.didUpdateButtonTitle(buttonTitle)
+        
+        // Perform the cart operation based on the new status
+        if isInCart {
+            CartManager.shared.addToCart(item: product)
+        } else {
+            CartManager.shared.removeFromCart(item: product)
+        }
+        
+        // Notify delegate about the button title change
+        delegate?.didUpdateButtonTitle(isInCart ? "Remove from Cart" : "Add to Cart")
+        
+        // Optionally update the price or other properties if needed
+        // delegate?.didUpdatePrice(productPrice) // Uncomment if needed
     }
 }

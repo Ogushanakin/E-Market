@@ -27,18 +27,16 @@ class DetailViewController: UIViewController, DetailViewModelDelegate {
         view.backgroundColor = .white
         setupUI()
         setupBindings()
+        NotificationCenter.default.addObserver(self, selector: #selector(cartDidUpdate), name: CartManager.shared.cartDidUpdateNotification, object: nil)
     }
     
     private func setupUI() {
         view.addSubview(detailView)
-        
-        // Set constraints using anchor method
         detailView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                           left: view.safeAreaLayoutGuide.leftAnchor,
                           bottom: view.safeAreaLayoutGuide.bottomAnchor,
                           right: view.safeAreaLayoutGuide.rightAnchor)
         
-        // Add target for button action
         detailView.addToCartButton.addTarget(self, action: #selector(addToCartButtonTapped), for: .touchUpInside)
     }
     
@@ -50,12 +48,21 @@ class DetailViewController: UIViewController, DetailViewModelDelegate {
         viewModel.toggleCartStatus()
     }
     
-    // DetailViewModelDelegate methods
+    @objc private func cartDidUpdate() {
+        // Update button title based on current cart status
+        let buttonTitle = viewModel.isInCart ? "Remove from Cart" : "Add to Cart"
+        detailView.addToCartButton.setTitle(buttonTitle, for: .normal)
+    }
+    
     func didUpdatePrice(_ price: String) {
         detailView.priceValueLabel.text = price
     }
     
     func didUpdateButtonTitle(_ title: String) {
         detailView.addToCartButton.setTitle(title, for: .normal)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }

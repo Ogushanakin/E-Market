@@ -44,7 +44,7 @@ class ProductCollectionViewCell: UICollectionViewCell {
         button.backgroundColor = .blue
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 8
-        button.addTarget(self, action: #selector(addToCartButtonTapped), for: .touchUpInside)
+        button.addTarget(ProductCollectionViewCell.self, action: #selector(addToCartButtonTapped), for: .touchUpInside)
         return button
     }()
     

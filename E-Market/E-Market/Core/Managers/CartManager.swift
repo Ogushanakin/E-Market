@@ -23,10 +23,10 @@ class CartManager {
     func addToCart(item: HomeModel) {
         var currentCart = getCart()
         if let index = currentCart.firstIndex(where: { $0.id == item.id }) {
-            // Eğer ürün zaten varsa, miktarı artır
+            // Increment count if item already exists
             currentCart[index].count += 1
         } else {
-            // Yeni ürün ekle
+            // Add new item with count 1
             var newItem = item
             newItem.count = 1
             currentCart.append(newItem)
@@ -34,6 +34,7 @@ class CartManager {
         saveCart(cart: currentCart)
         NotificationCenter.default.post(name: cartDidUpdateNotification, object: nil)
     }
+
     
     func removeFromCart(item: HomeModel) {
         var currentCart = getCart()
