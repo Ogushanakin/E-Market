@@ -7,10 +7,15 @@
 
 import UIKit
 
+protocol DetailViewControllerDelegate: AnyObject {
+    func didUpdateCart()
+}
+
 class DetailViewController: UIViewController, DetailViewModelDelegate {
     
     private let detailView = DetailView()
     private var viewModel: DetailViewModel!
+    weak var delegate: DetailViewControllerDelegate?
     
     init(viewModel: DetailViewModel) {
         self.viewModel = viewModel
@@ -42,14 +47,19 @@ class DetailViewController: UIViewController, DetailViewModelDelegate {
     
     private func setupBindings() {
         detailView.configure(with: viewModel)
+        updateButtonTitle()
     }
     
     @objc private func addToCartButtonTapped() {
         viewModel.toggleCartStatus()
+        delegate?.didUpdateCart() // Delegate'e güncelleme bildirimi gönder
     }
     
     @objc private func cartDidUpdate() {
-        // Update button title based on current cart status
+        updateButtonTitle()
+    }
+    
+    private func updateButtonTitle() {
         let buttonTitle = viewModel.isInCart ? "Remove from Cart" : "Add to Cart"
         detailView.addToCartButton.setTitle(buttonTitle, for: .normal)
     }

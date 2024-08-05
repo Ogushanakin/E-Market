@@ -14,20 +14,21 @@ class HomeViewController: UIViewController {
     private var homeViewModel = HomeViewModel()
     private var isLoading = false
     private var cartUpdateObserver: NSObjectProtocol?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupBindings()
         fetchMoreData()
         setupInfiniteScroll()
-        setupCartUpdateObserver()
         configureNavBar()
+        setupCartUpdateObserver() // Observer'ı burada ayarla
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateBadgeValue()
+        homeView.collectionView.reloadData() // Koleksiyon görünümünü güncelle
     }
 
     private func setupView() {
@@ -88,7 +89,9 @@ class HomeViewController: UIViewController {
     
     private func updateBadgeValue() {
         let cartCount = CartManager.shared.cartItems.count
-        tabBarController?.tabBar.items?[1].badgeValue = cartCount > 0 ? "\(cartCount)" : nil
+        if let tabBarItems = tabBarController?.tabBar.items, tabBarItems.indices.contains(1) {
+            tabBarItems[1].badgeValue = cartCount > 0 ? "\(cartCount)" : nil
+        }
     }
     
     deinit {
@@ -173,6 +176,15 @@ extension HomeViewController {
         let isInCart = CartManager.shared.isProductInCart(selectedProduct)
         let viewModel = DetailViewModel(product: selectedProduct, isInCart: isInCart)
         let productDetailVC = DetailViewController(viewModel: viewModel)
+        productDetailVC.delegate = self // Delegate ayarla
         navigationController?.pushViewController(productDetailVC, animated: true)
+    }
+}
+
+// MARK: - DetailViewControllerDelegate
+extension HomeViewController: DetailViewControllerDelegate {
+    func didUpdateCart() {
+        homeView.collectionView.reloadData() // Sepet güncellemeleri yapıldığında koleksiyon görünümünü yeniden yükleyin
+        updateBadgeValue()
     }
 }

@@ -44,7 +44,6 @@ class ProductCollectionViewCell: UICollectionViewCell {
         button.backgroundColor = .blue
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 8
-        button.addTarget(ProductCollectionViewCell.self, action: #selector(addToCartButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -54,6 +53,7 @@ class ProductCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        addToCartButton.addTarget(self, action: #selector(addToCartButtonTapped), for: .touchUpInside)
     }
     
     required init?(coder aDecoder: NSCoder) {
