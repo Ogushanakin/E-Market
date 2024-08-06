@@ -18,7 +18,7 @@ class TabBarController: UITabBarController {
         let homeVC = HomeViewController()
         let cardVC = CartViewController()
         let favoriteVC = FavoritesViewController()
-        let profileVC = FilterViewController()
+        let profileVC = ProfileController()
         
         let homeNavController = UINavigationController(rootViewController: homeVC)
         let cardNavController = UINavigationController(rootViewController: cardVC)

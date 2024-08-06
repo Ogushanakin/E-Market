@@ -7,8 +7,13 @@
 
 import UIKit
 
+protocol HomeViewDelegate: AnyObject {
+    func didTapFilterButton()
+}
+
 class HomeView: UIView {
-    
+    weak var delegate: HomeViewDelegate?
+
     let headerView: HeaderView = {
         let view = HeaderView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -27,6 +32,7 @@ class HomeView: UIView {
     let filterLabel: UILabel = {
         let label = UILabel()
         label.text = "Filters:"
+        label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -35,8 +41,8 @@ class HomeView: UIView {
     let filterButton: UIButton = {
         let button = UIButton()
         button.setTitle("Select Filter", for: .normal)
-        button.setTitleColor(.darkGray, for: .normal)
-        button.backgroundColor = .lightGray
+        button.setTitleColor(.black, for: .normal)
+        button.backgroundColor = .systemGroupedBackground
         button.translatesAutoresizingMaskIntoConstraints = false
         button.anchor(width: 140, height: 40)
         return button
@@ -71,36 +77,45 @@ class HomeView: UIView {
     
     private func setupUI() {
         backgroundColor = .systemBlue
+        let view = UIView()
+        view.backgroundColor = .white
+        
         addSubview(headerView)
         addSubview(searchBar)
+        addSubview(view)
         addSubview(horizontalStackView)
         addSubview(collectionView)
         
         horizontalStackView.addArrangedSubview(filterLabel)
         horizontalStackView.addArrangedSubview(filterButton)
         
-        // Set up constraints for headerView
         headerView.anchor(top: safeAreaLayoutGuide.topAnchor,
                           left: leftAnchor,
                           right: rightAnchor,
                           height: 60)
         
-        // Set up constraints for searchBar
         searchBar.anchor(top: headerView.bottomAnchor,
                          left: leftAnchor,
                          right: rightAnchor)
         
-        // Set up constraints for horizontalStackView
+        view.anchor(top: searchBar.bottomAnchor,
+                                   left: leftAnchor,
+                                   right: rightAnchor,
+                                   paddingTop: 0, height: 100)
+        
         horizontalStackView.anchor(top: searchBar.bottomAnchor,
                                    left: leftAnchor,
                                    right: rightAnchor,
-                                   paddingTop: 0)
+                                   paddingTop: 10, paddingLeft: 20, paddingRight: 20)
         
-        // Set up constraints for collectionView
         collectionView.anchor(top: horizontalStackView.bottomAnchor,
                               left: leftAnchor,
                               bottom: bottomAnchor,
                               right: rightAnchor,
-                              paddingTop: 0)
+                              paddingTop: 10)
+        filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+    }
+    @objc private func filterButtonTapped() {
+        delegate?.didTapFilterButton()
     }
 }

@@ -41,10 +41,11 @@ class HomeViewController: UIViewController {
         
         homeView.collectionView.dataSource = self
         homeView.collectionView.delegate = self
-        homeView.collectionView.register(ProductCollectionViewCell.self, forCellWithReuseIdentifier: ProductCollectionViewCell.reuseIdentifier)
-        
-        homeView.filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         homeView.searchBar.delegate = self
+        homeView.delegate = self
+        
+        homeView.collectionView.register(ProductCollectionViewCell.self, forCellWithReuseIdentifier: ProductCollectionViewCell.reuseIdentifier)
+        homeView.filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
     }
     
     private func configureNavBar() {
@@ -154,11 +155,9 @@ extension HomeViewController: ProductCollectionViewCellDelegate {
                 cell.updateFavoriteButton(isFavorite: true)
             }
             
-            // Reload the collection view data
             homeView.collectionView.reloadData()
         }
     }
-    
 }
 
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
@@ -234,5 +233,14 @@ extension HomeViewController: DetailViewControllerDelegate {
     }
     func didUpdateFavorites() {
         homeView.collectionView.reloadData()
+    }
+}
+
+// MARK: - HomeViewDelegate
+extension HomeViewController: HomeViewDelegate {
+    func didTapFilterButton() {
+        let filterViewController = FilterViewController()
+        filterViewController.modalPresentationStyle = .fullScreen
+        present(filterViewController, animated: true, completion: nil)
     }
 }

@@ -19,35 +19,40 @@ class ProductTableViewCell: UITableViewCell {
 
     let priceLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = .gray
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = .systemBlue
         return label
     }()
 
     let quantityLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 18)
+        label.textColor = .white
         label.textAlignment = .center
+        label.backgroundColor = .systemBlue
         return label
     }()
 
     let increaseButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("+", for: .normal)
+        button.tintColor = .darkGray
+        button.backgroundColor = .systemGroupedBackground
+        button.layer.cornerRadius = 5
         return button
     }()
 
     let decreaseButton: UIButton = {
         let button = UIButton(type: .system)
+        button.tintColor = .darkGray
         button.setTitle("-", for: .normal)
+        button.backgroundColor = .systemGroupedBackground
+        button.layer.cornerRadius = 5
         return button
     }()
 
-    // Stored Property
     var product: HomeModel?
 
-    // Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -70,30 +75,32 @@ class ProductTableViewCell: UITableViewCell {
         nameLabel.anchor(top: contentView.topAnchor,
                          left: contentView.leftAnchor,
                          right: contentView.rightAnchor,
-                         paddingTop: 8,
-                         paddingLeft: 16,
+                         paddingTop: 36,
+                         paddingLeft: 20,
                          paddingRight: 16)
         
         priceLabel.anchor(top: nameLabel.bottomAnchor,
                           left: contentView.leftAnchor,
                           right: contentView.rightAnchor,
                           paddingTop: 4,
-                          paddingLeft: 16,
+                          paddingLeft: 20,
                           paddingRight: 16)
         
         quantityLabel.centerY(inView: contentView)
-        quantityLabel.centerX(inView: contentView)
+        quantityLabel.anchor(right: contentView.rightAnchor,
+                             paddingRight: 80,
+                             width: 50, height: 50)
         
         increaseButton.anchor(left: quantityLabel.rightAnchor,
-                              paddingLeft: 8,
+                              paddingLeft: 0,
                               width: 50,
-                              height: 50)
+                              height: 46)
         increaseButton.centerY(inView: quantityLabel)
         
         decreaseButton.anchor(right: quantityLabel.leftAnchor,
-                              paddingRight: 8,
+                              paddingRight: 0,
                               width: 50,
-                              height: 50)
+                              height: 46)
         decreaseButton.centerY(inView: quantityLabel)
 
     }

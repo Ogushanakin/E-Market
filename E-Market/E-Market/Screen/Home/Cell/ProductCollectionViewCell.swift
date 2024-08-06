@@ -41,7 +41,7 @@ class ProductCollectionViewCell: UICollectionViewCell {
     let addToCartButton: UIButton = {
         let button = UIButton()
         button.setTitle("Add to Cart", for: .normal)
-        button.backgroundColor = .blue
+        button.backgroundColor = .systemBlue
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 8
         return button
@@ -81,7 +81,7 @@ class ProductCollectionViewCell: UICollectionViewCell {
                                 paddingTop: 0,
                                 paddingLeft: 0,
                                 paddingRight: 0,
-                                height: 150)
+                                height: 160)
         
         priceLabel.anchor(top: productImageView.bottomAnchor,
                           left: contentView.leftAnchor,
