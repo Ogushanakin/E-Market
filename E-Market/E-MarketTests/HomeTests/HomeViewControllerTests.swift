@@ -28,7 +28,7 @@ class HomeViewControllerTests: XCTestCase {
     }
 
     func testFetchMoreDataSuccess() {
-        let expectedProducts = [HomeModel(
+        let expectedProducts = [Product(
             createdAt: nil,
             name: "Test Product",
             image: nil,

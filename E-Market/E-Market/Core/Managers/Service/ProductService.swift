@@ -13,9 +13,9 @@ class ProductService: ProductServiceProtocol {
     private var currentPage = 0
     private let itemsPerPage = 4
     
-    private init() {}
+    public init() {}
     
-    func fetchMoreProducts(completion: @escaping (Result<[HomeModel], Error>) -> Void) {
+    func fetchMoreProducts(completion: @escaping (Result<[Product], Error>) -> Void) {
         currentPage += 1
         
         guard let url = URL(string: "https://5fc9346b2af77700165ae514.mockapi.io/products?page=\(currentPage)&limit=\(itemsPerPage)") else {
@@ -31,7 +31,7 @@ class ProductService: ProductServiceProtocol {
             
             do {
                 let decoder = JSONDecoder()
-                let products = try decoder.decode([HomeModel].self, from: data)
+                let products = try decoder.decode([Product].self, from: data)
                 completion(.success(products))
             } catch {
                 completion(.failure(error))
@@ -39,7 +39,7 @@ class ProductService: ProductServiceProtocol {
         }.resume()
     }
     
-    func searchProducts(query: String, completion: @escaping (Result<[HomeModel], Error>) -> Void) {
+    func searchProducts(query: String, completion: @escaping (Result<[Product], Error>) -> Void) {
         currentPage = 0
         
         guard let url = URL(string: "https://5fc9346b2af77700165ae514.mockapi.io/products?search=\(query)&limit=\(itemsPerPage)") else {
@@ -47,7 +47,7 @@ class ProductService: ProductServiceProtocol {
             return
         }
         
-        NetworkManager.shared.fetch(url: url, responseType: [HomeModel].self) { result in
+        NetworkManager.shared.fetch(url: url, responseType: [Product].self) { result in
             switch result {
             case .success(let products):
                 completion(.success(products))
@@ -55,5 +55,28 @@ class ProductService: ProductServiceProtocol {
                 completion(.failure(error))
             }
         }
+    }
+
+    // Yeni fonksiyon ekledik
+    func fetchAllProducts(completion: @escaping (Result<[Product], Error>) -> Void) {
+        guard let url = URL(string: "https://5fc9346b2af77700165ae514.mockapi.io/products") else {
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let data = data, error == nil else {
+                completion(.failure(error ?? NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Network error"])))
+                return
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let products = try decoder.decode([Product].self, from: data)
+                completion(.success(products))
+            } catch {
+                completion(.failure(error))
+            }
+        }.resume()
     }
 }

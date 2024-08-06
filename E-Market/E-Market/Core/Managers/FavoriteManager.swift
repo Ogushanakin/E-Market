@@ -15,11 +15,11 @@ class FavoriteManager {
     
     private init() {}
     
-    var cartItems: [HomeModel] {
+    var cartItems: [Product] {
         return getFavorites()
     }
     
-    func addToCart(item: HomeModel) {
+    func addToCart(item: Product) {
         var currentCart = getFavorites()
         if let index = currentCart.firstIndex(where: { $0.id == item.id }) {
             currentCart[index].count += 1
@@ -33,7 +33,7 @@ class FavoriteManager {
     }
 
     
-    func removeFromCart(item: HomeModel) {
+    func removeFromCart(item: Product) {
         var currentCart = getFavorites()
         if let index = currentCart.firstIndex(where: { $0.id == item.id }) {
             if currentCart[index].count > 1 {
@@ -53,11 +53,11 @@ class FavoriteManager {
     
     // MARK: - Private Methods
     
-    private func getFavorites() -> [HomeModel] {
+    private func getFavorites() -> [Product] {
         if let data = UserDefaults.standard.data(forKey: cartKey) {
             do {
                 let decoder = JSONDecoder()
-                let cart = try decoder.decode([HomeModel].self, from: data)
+                let cart = try decoder.decode([Product].self, from: data)
                 return cart
             } catch {
                 print("Error decoding cart: \(error)")
@@ -66,7 +66,7 @@ class FavoriteManager {
         return []
     }
     
-    private func saveCart(cart: [HomeModel]) {
+    private func saveCart(cart: [Product]) {
         do {
             let encoder = JSONEncoder()
             let data = try encoder.encode(cart)
@@ -76,7 +76,7 @@ class FavoriteManager {
         }
     }
     
-    func isProductInCart(_ product: HomeModel) -> Bool {
+    func isProductInCart(_ product: Product) -> Bool {
         let currentCart = getFavorites()
         return currentCart.contains { $0.id == product.id }
     }

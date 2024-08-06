@@ -10,6 +10,13 @@ import UIKit
 class FavoritesView: UIView {
     
     // MARK: - UI Components
+    let headerView: HeaderView = {
+        let view = HeaderView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.titleLabel.text = "Favorites"
+        return view
+    }()
+    
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ProductTableViewCell.self, forCellReuseIdentifier: "productCell")
@@ -38,18 +45,33 @@ class FavoritesView: UIView {
     
     // MARK: - Setup UI
     private func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .systemBlue
+        addSubview(headerView)
         addSubview(tableView)
-        addSubview(totalLabel)
         
-        // Konumlandırma için `anchor` fonksiyonlarını kullanıyoruz
-        tableView.anchor(top: topAnchor,
+        headerView.anchor(top: safeAreaLayoutGuide.topAnchor,
+                                      left: leftAnchor,
+                                      right: rightAnchor,
+                                      height: 60)
+        
+        tableView.anchor(top: headerView.bottomAnchor,
                          left: leftAnchor,
                          bottom: bottomAnchor, right: rightAnchor,
                          paddingTop: 0,
                          paddingLeft: 0,
-                         paddingBottom: 200)
+                         paddingBottom: 150)
         
+        let view = UIView()
+        view.backgroundColor = .white
+        addSubview(view)
+        view.anchor(top: tableView.bottomAnchor,
+                         left: leftAnchor,
+                         bottom: bottomAnchor, right: rightAnchor,
+                         paddingTop: 0,
+                         paddingLeft: 0,
+                         paddingBottom: 0)
+        
+        addSubview(totalLabel)
         totalLabel.anchor(left: leftAnchor, bottom: bottomAnchor,
                           right: rightAnchor,
                           paddingLeft: 16, paddingBottom: 100,

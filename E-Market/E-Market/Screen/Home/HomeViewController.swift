@@ -216,7 +216,7 @@ extension HomeViewController: UISearchBarDelegate {
 
 // MARK: - Navigation
 extension HomeViewController {
-    private func navigateToProductDetail(_ selectedProduct: HomeModel) {
+    private func navigateToProductDetail(_ selectedProduct: Product) {
         let isInCart = CartManager.shared.isProductInCart(selectedProduct)
         let viewModel = DetailViewModel(product: selectedProduct, isInCart: isInCart)
         let productDetailVC = DetailViewController(viewModel: viewModel)
@@ -239,7 +239,9 @@ extension HomeViewController: DetailViewControllerDelegate {
 // MARK: - HomeViewDelegate
 extension HomeViewController: HomeViewDelegate {
     func didTapFilterButton() {
-        let filterViewController = FilterViewController()
+        let productService: ProductServiceProtocol = ProductService()
+        let filterViewModel = FilterViewModel(productService: productService)
+        let filterViewController = FilterViewController(viewModel: filterViewModel)
         filterViewController.modalPresentationStyle = .fullScreen
         present(filterViewController, animated: true, completion: nil)
     }

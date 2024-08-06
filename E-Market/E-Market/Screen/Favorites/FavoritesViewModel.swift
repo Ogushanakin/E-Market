@@ -12,7 +12,7 @@ class FavoritesViewModel {
     // MARK: - Properties
     private let favoriteManager = FavoriteManager.shared
     
-    var favoriteItems: [HomeModel] {
+    var favoriteItems: [Product] {
         return favoriteManager.cartItems
     }
     
@@ -31,7 +31,7 @@ class FavoritesViewModel {
         return "\(favoriteItems.count) items"
     }
     
-    func toggleFavorite(for product: HomeModel) {
+    func toggleFavorite(for product: Product) {
         if favoriteManager.isProductInCart(product) {
             favoriteManager.removeFromCart(item: product)
         } else {

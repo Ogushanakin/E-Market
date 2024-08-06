@@ -43,7 +43,7 @@ class ProductCollectionViewCell: UICollectionViewCell {
         button.setTitle("Add to Cart", for: .normal)
         button.backgroundColor = .systemBlue
         button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 8
+        button.layer.cornerRadius = 4
         return button
     }()
     
@@ -96,20 +96,20 @@ class ProductCollectionViewCell: UICollectionViewCell {
         addToCartButton.anchor(left: contentView.leftAnchor,
                                bottom: contentView.bottomAnchor,
                                right: contentView.rightAnchor,
-                               paddingLeft: 10,
+                               paddingLeft: 7,
                                paddingBottom: 10,
-                               paddingRight: 10,
+                               paddingRight: 7,
                                height: 36)
         
         favoriteButton.anchor(top: contentView.topAnchor,
                               right: contentView.rightAnchor,
-                              paddingTop: 10,
+                              paddingTop: 14,
                               paddingRight: 10,
-                              width: 30,
-                              height: 30)
+                              width: 40,
+                              height: 40)
     }
     
-    func configure(with model: HomeModel?) {
+    func configure(with model: Product?) {
         nameLabel.text = model?.name
         priceLabel.text = "$\(model?.price ?? "")"
         

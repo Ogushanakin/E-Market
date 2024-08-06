@@ -8,12 +8,13 @@
 import UIKit
 
 class TabBarController: UITabBarController {
+
     override func viewDidLoad() {
         super.viewDidLoad()
         initilazeView()
-        tabBar.backgroundColor = UIColor.white
+        setupTabBar()
     }
-    
+
     private func initilazeView() {
         let homeVC = HomeViewController()
         let cardVC = CartViewController()
@@ -25,21 +26,20 @@ class TabBarController: UITabBarController {
         let favoriteNavController = UINavigationController(rootViewController: favoriteVC)
         let profileNavController = UINavigationController(rootViewController: profileVC)
         
-        homeVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house")?.withTintColor(.systemBlue, renderingMode: .alwaysOriginal))
+        homeVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "home"), selectedImage: UIImage(named: "home")?.withTintColor(.systemBlue, renderingMode: .alwaysOriginal))
         cardVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "cart"), selectedImage: UIImage(named: "cart")?.withTintColor(.systemBlue, renderingMode: .alwaysOriginal))
         favoriteVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "favorite"), selectedImage: UIImage(named: "favorite")?.withTintColor(.systemBlue, renderingMode: .alwaysOriginal))
         profileVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "profile"), selectedImage: UIImage(named: "profile")?.withTintColor(.systemBlue, renderingMode: .alwaysOriginal))
         
         viewControllers = [homeNavController, cardNavController, favoriteNavController, profileNavController]
-        setupTabBar()
     }
     
     private func setupTabBar() {
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let delegate = windowScene.delegate as? SceneDelegate,
-           let window = delegate.window {
-            window.rootViewController = UINavigationController(rootViewController: self)
-            window.makeKeyAndVisible()
-        }
+        // Tab bar'ı özel sınıfla yeniden oluşturma
+        let customTabBar = CustomTabBar()
+        setValue(customTabBar, forKey: "tabBar")
+        
+        // Tab bar'ın arka plan rengini ayarlama
+        customTabBar.backgroundColor = .white
     }
 }

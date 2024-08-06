@@ -68,13 +68,14 @@ class DetailView: UIView {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 4
+        stackView.distribution = .fillEqually
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
     let priceLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.systemFont(ofSize: 18)
         label.text = "Price:"
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -122,7 +123,7 @@ class DetailView: UIView {
         
         priceStackView.addArrangedSubview(priceLabel)
         priceStackView.addArrangedSubview(priceValueLabel)
-        
+
         NSLayoutConstraint.activate([
             headerView.topAnchor.constraint(equalTo: topAnchor),
             headerView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -147,10 +148,10 @@ class DetailView: UIView {
             descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             
-            horizontalStackView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
+            horizontalStackView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10),
             horizontalStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             horizontalStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            horizontalStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)
+            horizontalStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -15)
         ])
         
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)

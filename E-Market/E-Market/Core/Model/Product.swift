@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct HomeModel: Codable, Equatable {
+struct Product: Codable, Equatable {
     let createdAt: String?
     let name: String?
     let image: String?
@@ -30,7 +30,6 @@ struct HomeModel: Codable, Equatable {
         case count
     }
 
-    // Custom initializer for manual instantiation
     init(createdAt: String? = nil, name: String? = nil, image: String? = nil, price: String? = nil, description: String? = nil, model: String? = nil, brand: String? = nil, id: String? = nil, count: Int = 1) {
         self.createdAt = createdAt
         self.name = name

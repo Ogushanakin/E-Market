@@ -7,203 +7,90 @@
 
 import UIKit
 
-class FilterViewController: UIViewController, FilterViewControllerProtocol {
+class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var viewModel: FilterViewModelProtocol?
+    private let viewModel: FilterViewModelProtocol
+    private let tableView = UITableView()
+    private let dismissButton = UIButton(type: .system)
     
-    // UI Bileşenleri
-    private let sortButtons: [UIButton] = {
-        let oldToNewButton = UIButton(type: .system)
-        oldToNewButton.setTitle("Old to New", for: .normal)
-        oldToNewButton.tag = 0
-        
-        let newToOldButton = UIButton(type: .system)
-        newToOldButton.setTitle("New to Old", for: .normal)
-        newToOldButton.tag = 1
-        
-        let priceHighToLowButton = UIButton(type: .system)
-        priceHighToLowButton.setTitle("Price High to Low", for: .normal)
-        priceHighToLowButton.tag = 2
-        
-        let priceLowToHighButton = UIButton(type: .system)
-        priceLowToHighButton.setTitle("Price Low to High", for: .normal)
-        priceLowToHighButton.tag = 3
-        
-        return [oldToNewButton, newToOldButton, priceHighToLowButton, priceLowToHighButton]
-    }()
+    init(viewModel: FilterViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
     
-    private let brandSearchBar: UISearchBar = {
-        let searchBar = UISearchBar()
-        searchBar.placeholder = "Search Brands"
-        return searchBar
-    }()
-    
-    private let modelSearchBar: UISearchBar = {
-        let searchBar = UISearchBar()
-        searchBar.placeholder = "Search Models"
-        return searchBar
-    }()
-    
-    private let brandTableView: UITableView = {
-        let tableView = UITableView()
-        tableView.register(FilterTableViewCell.self, forCellReuseIdentifier: "FilterTableViewCell")
-        return tableView
-    }()
-    
-    private let modelTableView: UITableView = {
-        let tableView = UITableView()
-        tableView.register(FilterTableViewCell.self, forCellReuseIdentifier: "FilterTableViewCell")
-        return tableView
-    }()
-    
-    private let primaryButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Apply Filters", for: .normal)
-        button.backgroundColor = .blue
-        button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 10
-        return button
-    }()
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        
         setupSubviews()
         setupConstraints()
-        
-        brandTableView.delegate = self
-        brandTableView.dataSource = self
-        modelTableView.delegate = self
-        modelTableView.dataSource = self
-        
-        brandSearchBar.delegate = self
-        modelSearchBar.delegate = self
-        
-        sortButtons.forEach { button in
-            button.addTarget(self, action: #selector(sortButtonsTapped(_:)), for: .touchUpInside)
-        }
-        primaryButton.addTarget(self, action: #selector(finisFilterTapped), for: .touchUpInside)
-        
-        viewModel?.viewDidLoad()
+        configureTableView()
+        fetchBrands()
     }
     
     private func setupSubviews() {
-        view.addSubview(brandSearchBar)
-        view.addSubview(brandTableView)
-        view.addSubview(modelSearchBar)
-        view.addSubview(modelTableView)
-        view.addSubview(primaryButton)
+        view.backgroundColor = .white
+        view.addSubview(tableView)
+        view.addSubview(dismissButton)
         
-        let sortButtonsStackView = UIStackView(arrangedSubviews: sortButtons)
-        sortButtonsStackView.axis = .vertical
-        sortButtonsStackView.spacing = 10
-        view.addSubview(sortButtonsStackView)
-        
+        dismissButton.setTitle("Dismiss", for: .normal)
+        dismissButton.addTarget(self, action: #selector(dismissButtonTapped), for: .touchUpInside)
     }
     
     private func setupConstraints() {
-        brandSearchBar.translatesAutoresizingMaskIntoConstraints = false
-        brandTableView.translatesAutoresizingMaskIntoConstraints = false
-        modelSearchBar.translatesAutoresizingMaskIntoConstraints = false
-        modelTableView.translatesAutoresizingMaskIntoConstraints = false
-        primaryButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        let sortButtonsStackView = view.subviews.first(where: { $0 is UIStackView }) as! UIStackView
-        sortButtonsStackView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        dismissButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            brandSearchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            brandSearchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            brandSearchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
-            sortButtonsStackView.topAnchor.constraint(equalTo: brandSearchBar.bottomAnchor, constant: 20),
-            sortButtonsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            
-            brandTableView.topAnchor.constraint(equalTo: sortButtonsStackView.bottomAnchor, constant: 20),
-            brandTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            brandTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            brandTableView.heightAnchor.constraint(equalToConstant: 200),
-            
-            modelSearchBar.topAnchor.constraint(equalTo: brandTableView.bottomAnchor, constant: 20),
-            modelSearchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            modelSearchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            
-            modelTableView.topAnchor.constraint(equalTo: modelSearchBar.bottomAnchor, constant: 20),
-            modelTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            modelTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            modelTableView.heightAnchor.constraint(equalToConstant: 200),
-            
-            primaryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            primaryButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            primaryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            primaryButton.heightAnchor.constraint(equalToConstant: 50)
+            dismissButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16)
         ])
     }
     
-    @objc private func sortButtonsTapped(_ sender: UIButton) {
-        viewModel?.sortButtonsTapped(tag: sender.tag)
-        sortButtons.forEach { button in
-            button.setImage(UIImage(systemName: "circle"), for: .normal)
-        }
-        sender.setImage(UIImage(systemName: "checkmark.circle"), for: .normal)
+    private func configureTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
-    @objc private func finisFilterTapped() {
-        viewModel?.finisFilterTapped()
-        dismiss(animated: true)
-    }
-    
-    // FilterViewControllerProtocol Implementasyonu
-    func reload() {
-        brandTableView.reloadData()
-        modelTableView.reloadData()
-    }
-}
-
-extension FilterViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchBar == brandSearchBar {
-            viewModel?.brand.searchBarTextDidChange(searchText) { [weak self] in
-                self?.brandTableView.reloadData()
-            }
-        } else if searchBar == modelSearchBar {
-            viewModel?.model.searchBarTextDidChange(searchText) { [weak self] in
-                self?.modelTableView.reloadData()
+    private func fetchBrands() {
+        viewModel.fetchBrands { [weak self] result in
+            switch result {
+            case .success():
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
+            case .failure(let error):
+                // Handle error (show alert, etc.)
+                print("Failed to fetch brands: \(error)")
             }
         }
     }
-}
-
-extension FilterViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    @objc private func dismissButtonTapped() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: - UITableViewDataSource
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView == brandTableView {
-            return viewModel?.brand.itemsCount ?? 0
-        } else {
-            return viewModel?.model.itemsCount ?? 0
-        }
+        return viewModel.brands.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "FilterTableViewCell", for: indexPath) as! FilterTableViewCell
-        let item: FilterModel
-        
-        if tableView == brandTableView {
-            item = viewModel?.brand.item(at: indexPath.row) ?? FilterModel(name: "", isChecked: false)
-        } else {
-            item = viewModel?.model.item(at: indexPath.row) ?? FilterModel(name: "", isChecked: false)
-        }
-        
-        cell.setUI(name: item.name, isChecked: item.isChecked)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = viewModel.brands[indexPath.row]
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView == brandTableView {
-            viewModel?.brand.selectedRow(at: indexPath.row)
-        } else {
-            viewModel?.model.selectedRow(at: indexPath.row)
-        }
-        tableView.reloadRows(at: [indexPath], with: .automatic)
-    }
+    // MARK: - UITableViewDelegate
+    
+    // Implement delegate methods if needed
 }

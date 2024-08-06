@@ -27,7 +27,7 @@ class HomeViewModelTests: XCTestCase {
 
     func testFetchMoreProductsSuccess() {
         // Given
-        let expectedProducts = [HomeModel(
+        let expectedProducts = [Product(
             createdAt: nil,
             name: "Test Product",
             image: nil,
@@ -57,7 +57,7 @@ class HomeViewModelTests: XCTestCase {
 
     func testSearchProductsSuccess() {
         // Given
-        let expectedProducts = [HomeModel(
+        let expectedProducts = [Product(
             createdAt: nil,
             name: "Search Product",
             image: nil,

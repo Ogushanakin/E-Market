@@ -9,7 +9,7 @@ import Foundation
 
 class HomeViewModel {
     private let productService: ProductServiceProtocol
-    var homeModels: [HomeModel] = []
+    var homeModels: [Product] = []
     
     init(productService: ProductServiceProtocol) {
         self.productService = productService

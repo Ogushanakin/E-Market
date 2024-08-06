@@ -51,7 +51,7 @@ class ProductTableViewCell: UITableViewCell {
         return button
     }()
 
-    var product: HomeModel?
+    var product: Product?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -111,7 +111,7 @@ class ProductTableViewCell: UITableViewCell {
     }
     
     // Configure cell with product data
-    func configure(with product: HomeModel) {
+    func configure(with product: Product) {
         self.product = product
         nameLabel.text = product.name
         priceLabel.text = "$\(product.price ?? "0")"

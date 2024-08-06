@@ -57,7 +57,7 @@ class DetailViewController: UIViewController, DetailViewModelDelegate, DetailVie
     
     @objc private func addToCartButtonTapped() {
         viewModel.toggleCartStatus()
-        delegate?.didUpdateCart() // Delegate'e güncelleme bildirimi gönder
+        delegate?.didUpdateCart()
     }
     
     @objc private func cartDidUpdate() {

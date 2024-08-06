@@ -17,11 +17,11 @@ class CartManager {
     
     private init() {}
     
-    var cartItems: [HomeModel] {
+    var cartItems: [Product] {
         return getCart()
     }
     
-    func addToCart(item: HomeModel) {
+    func addToCart(item: Product) {
         var currentCart = getCart()
         if let index = currentCart.firstIndex(where: { $0.id == item.id }) {
             currentCart[index].count += 1
@@ -35,7 +35,7 @@ class CartManager {
     }
 
     
-    func removeFromCart(item: HomeModel) {
+    func removeFromCart(item: Product) {
         var currentCart = getCart()
         if let index = currentCart.firstIndex(where: { $0.id == item.id }) {
             if currentCart[index].count > 1 {
@@ -55,11 +55,11 @@ class CartManager {
     
     // MARK: - Private Methods
     
-    private func getCart() -> [HomeModel] {
+    private func getCart() -> [Product] {
         if let data = UserDefaults.standard.data(forKey: cartKey) {
             do {
                 let decoder = JSONDecoder()
-                let cart = try decoder.decode([HomeModel].self, from: data)
+                let cart = try decoder.decode([Product].self, from: data)
                 return cart
             } catch {
                 print("Error decoding cart: \(error)")
@@ -68,7 +68,7 @@ class CartManager {
         return []
     }
     
-    private func saveCart(cart: [HomeModel]) {
+    private func saveCart(cart: [Product]) {
         do {
             let encoder = JSONEncoder()
             let data = try encoder.encode(cart)
@@ -78,7 +78,7 @@ class CartManager {
         }
     }
     
-    func isProductInCart(_ product: HomeModel) -> Bool {
+    func isProductInCart(_ product: Product) -> Bool {
         let currentCart = getCart()
         return currentCart.contains { $0.id == product.id }
     }

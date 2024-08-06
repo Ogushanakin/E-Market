@@ -12,7 +12,7 @@ class CartViewModel {
     // MARK: - Properties
     private let cartManager = CartManager.shared
     
-    var cartItems: [HomeModel] {
+    var cartItems: [Product] {
         return cartManager.cartItems
     }
     
@@ -35,13 +35,13 @@ class CartViewModel {
         return String(format: "%.2f", total)
     }
     
-    func increaseQuantity(for product: HomeModel) {
+    func increaseQuantity(for product: Product) {
         var updatedProduct = product
         updatedProduct.count += 1
         cartManager.addToCart(item: updatedProduct)
     }
     
-    func decreaseQuantity(for product: HomeModel) {
+    func decreaseQuantity(for product: Product) {
         var updatedProduct = product
         if updatedProduct.count > 1 {
             updatedProduct.count -= 1

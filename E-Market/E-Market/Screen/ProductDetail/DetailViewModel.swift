@@ -14,7 +14,7 @@ protocol DetailViewModelDelegate: AnyObject {
 
 class DetailViewModel {
     // Properties
-    let product: HomeModel
+    let product: Product
     var isInCart: Bool {
         didSet {
             let buttonTitle = isInCart ? "Remove from Cart" : "Add to Cart"
@@ -32,7 +32,7 @@ class DetailViewModel {
     weak var delegate: DetailViewModelDelegate?
     
     // Initializer
-    init(product: HomeModel, isInCart: Bool) {
+    init(product: Product, isInCart: Bool) {
         self.product = product
         self.isInCart = isInCart
     }

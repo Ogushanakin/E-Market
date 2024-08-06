@@ -20,7 +20,7 @@ final class E_MarketTests: XCTestCase {
 
     func testHomeModelInitialization() throws {
         // Given
-        let model = HomeModel(
+        let model = Product(
             createdAt: "2024-01-01",
             name: "Test Product",
             image: "image_url",
@@ -46,7 +46,7 @@ final class E_MarketTests: XCTestCase {
             let url = URL(string: "https://5fc9346b2af77700165ae514.mockapi.io/products")!
             let expectation = self.expectation(description: "Network request")
             
-            NetworkManager.shared.fetch(url: url, responseType: [HomeModel].self) { result in
+            NetworkManager.shared.fetch(url: url, responseType: [Product].self) { result in
                 switch result {
                 case .success:
                     expectation.fulfill()

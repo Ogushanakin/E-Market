@@ -13,6 +13,7 @@ class CartView: UIView {
     let headerView: HeaderView = {
         let view = HeaderView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.titleLabel.text = "Cart"
         return view
     }()
     

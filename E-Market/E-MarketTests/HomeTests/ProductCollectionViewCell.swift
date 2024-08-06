@@ -28,7 +28,7 @@ class ProductCollectionViewCellTests: XCTestCase {
 
     func testConfigureWithModel() {
         // Given
-        let model = HomeModel(
+        let model = Product(
             createdAt: nil,
             name: "Test Product",
             image: "https://example.com/image.jpg",
@@ -53,7 +53,7 @@ class ProductCollectionViewCellTests: XCTestCase {
 
     func testAddToCartButtonTapped() {
         // Given
-        cell.configure(with: HomeModel(name: "Test Product", image: nil, price: "10.0", id: "1"))
+        cell.configure(with: Product(name: "Test Product", image: nil, price: "10.0", id: "1"))
         
         // When
         cell.addToCartButton.sendActions(for: .touchUpInside)
@@ -64,7 +64,7 @@ class ProductCollectionViewCellTests: XCTestCase {
 
     func testFavoriteButtonTapped() {
         // Given
-        cell.configure(with: HomeModel(name: "Test Product", image: nil, price: "10.0", id: "1"))
+        cell.configure(with: Product(name: "Test Product", image: nil, price: "10.0", id: "1"))
         
         // When
         cell.favoriteButton.sendActions(for: .touchUpInside)
