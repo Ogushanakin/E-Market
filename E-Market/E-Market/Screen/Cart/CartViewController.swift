@@ -33,19 +33,21 @@ class CartViewController: UIViewController {
         cartView.tableView.delegate = self
         cartView.tableView.dataSource = self
         
-        // Register the cell class or nib
         cartView.tableView.register(ProductTableViewCell.self, forCellReuseIdentifier: "productCell")
     }
+    
     private func configureNavBar() {
         navigationController?.isNavigationBarHidden = true
         navigationController?.navigationBar.isHidden = true
     }
+    
     private func setupBindings() {
-        // No need to set delegate and dataSource here as it's already done in setupView
         cartView.tableView.reloadData()
     }
     
     private func updateUI() {
+        let isCartEmpty = viewModel.cartItems.isEmpty
+        cartView.updateCartView(isEmpty: isCartEmpty)
         cartView.tableView.reloadData()
         let totalPrice = viewModel.getTotalPrice()
         cartView.updateTotalPrice(with: totalPrice)

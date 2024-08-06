@@ -35,7 +35,6 @@ class FavoritesViewController: UIViewController {
         favoritesView.tableView.delegate = self
         favoritesView.tableView.dataSource = self
         
-        // Register the cell class or nib
         favoritesView.tableView.register(FavoriteProductTableViewCell.self, forCellReuseIdentifier: "favoriteProductCell")
     }
     
@@ -45,11 +44,12 @@ class FavoritesViewController: UIViewController {
     }
     
     private func setupBindings() {
-        // No need to set delegate and dataSource here as it's already done in setupView
         favoritesView.tableView.reloadData()
     }
     
     private func updateUI() {
+        let isFavoritesEmpty = viewModel.favoriteItems.isEmpty
+        favoritesView.updateFavoritesView(isEmpty: isFavoritesEmpty)
         favoritesView.tableView.reloadData()
         let totalFavorites = viewModel.getTotalFavorites()
         favoritesView.updateTotalFavorites(with: totalFavorites)
@@ -62,10 +62,8 @@ class FavoritesViewController: UIViewController {
         let product = viewModel.favoriteItems[indexPath.row]
         viewModel.toggleFavorite(for: product)
         
-        // Update UI
         updateUI()
         
-        // Notify HomeViewController to update its favorite status
         NotificationCenter.default.post(name: Notification.Name("UpdateFavoriteStatus"), object: product)
     }
 }

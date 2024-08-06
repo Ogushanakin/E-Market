@@ -9,6 +9,7 @@ import UIKit
 
 protocol HomeViewDelegate: AnyObject {
     func didTapFilterButton()
+    func didSelectProduct(_ product: Product)
 }
 
 class HomeView: UIView {
@@ -79,7 +80,6 @@ class HomeView: UIView {
         backgroundColor = .systemBlue
         let view = UIView()
         view.backgroundColor = .white
-        
         addSubview(headerView)
         addSubview(searchBar)
         addSubview(view)
@@ -93,15 +93,13 @@ class HomeView: UIView {
                           left: leftAnchor,
                           right: rightAnchor,
                           height: 60)
-        
+        view.anchor(top: searchBar.bottomAnchor,
+                                          left: leftAnchor,
+                                          right: rightAnchor,
+                                          paddingTop: 0, height: 100)
         searchBar.anchor(top: headerView.bottomAnchor,
                          left: leftAnchor,
                          right: rightAnchor)
-        
-        view.anchor(top: searchBar.bottomAnchor,
-                                   left: leftAnchor,
-                                   right: rightAnchor,
-                                   paddingTop: 0, height: 100)
         
         horizontalStackView.anchor(top: searchBar.bottomAnchor,
                                    left: leftAnchor,
@@ -113,8 +111,10 @@ class HomeView: UIView {
                               bottom: bottomAnchor,
                               right: rightAnchor,
                               paddingTop: 10)
+        
         filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
     }
+    
     @objc private func filterButtonTapped() {
         delegate?.didTapFilterButton()
     }

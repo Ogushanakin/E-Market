@@ -45,7 +45,6 @@ class HomeViewController: UIViewController {
         homeView.delegate = self
         
         homeView.collectionView.register(ProductCollectionViewCell.self, forCellWithReuseIdentifier: ProductCollectionViewCell.reuseIdentifier)
-        homeView.filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
     }
     
     private func configureNavBar() {
@@ -86,6 +85,7 @@ class HomeViewController: UIViewController {
         fetchMoreData()
         completion()
     }
+    
     private func setupInfiniteScroll() {
         homeView.collectionView.addInfiniteScroll { [weak self] _ in
             guard let self = self else { return }
@@ -93,10 +93,6 @@ class HomeViewController: UIViewController {
                 self.fetchMoreData()
             }
         }
-    }
-    
-    @objc private func filterButtonTapped() {
-
     }
     
     private func setupCartUpdateObserver() {
@@ -117,45 +113,49 @@ class HomeViewController: UIViewController {
             NotificationCenter.default.removeObserver(observer)
         }
     }
+    
+    @objc private func filterButtonTapped() {
+        let productService: ProductServiceProtocol = ProductService()
+        let filterViewModel = FilterViewModel(productService: productService)
+        let filterViewController = FilterViewController(viewModel: filterViewModel)
+        filterViewController.modalPresentationStyle = .fullScreen
+        present(filterViewController, animated: true, completion: nil)
+    }
 }
 
 // MARK: - ProductCollectionViewCellDelegate
 extension HomeViewController: ProductCollectionViewCellDelegate {
     func didSelectAddToCart(cell: ProductCollectionViewCell) {
-        if let indexPath = homeView.collectionView.indexPath(for: cell) {
-            let selectedProduct = homeViewModel.homeModels[indexPath.row]
-            let isInCart = CartManager.shared.isProductInCart(selectedProduct)
-            
-            if isInCart {
-                CartManager.shared.removeFromCart(item: selectedProduct)
-                showAlert(message: "Product removed from cart!")
-                cell.updateButtonTitle(isInCart: false)
-            } else {
-                CartManager.shared.addToCart(item: selectedProduct)
-                showAlert(message: "Product added to cart!")
-                cell.updateButtonTitle(isInCart: true)
+        guard let indexPath = homeView.collectionView.indexPath(for: cell) else { return }
+        let selectedProduct = homeViewModel.homeModels[indexPath.row]
+        
+        homeViewModel.addToCart(product: selectedProduct) { [weak self] isAdded in
+            DispatchQueue.main.async {
+                if isAdded {
+                    self?.showAlert(message: "Product added to cart!")
+                } else {
+                    self?.showAlert(message: "Product removed from cart!")
+                }
+                cell.updateButtonTitle(isInCart: isAdded)
+                self?.homeView.collectionView.reloadData()
             }
-            
-            homeView.collectionView.reloadData()
         }
     }
     
     func didSelectFavorite(cell: ProductCollectionViewCell) {
-        if let indexPath = homeView.collectionView.indexPath(for: cell) {
-            let selectedProduct = homeViewModel.homeModels[indexPath.row]
-            let isFavorite = FavoriteManager.shared.isProductInCart(selectedProduct)
-            
-            if isFavorite {
-                FavoriteManager.shared.removeFromCart(item: selectedProduct)
-                showAlert(message: "Product removed from favorites!")
-                cell.updateFavoriteButton(isFavorite: false)
-            } else {
-                FavoriteManager.shared.addToCart(item: selectedProduct)
-                showAlert(message: "Product added to favorites!")
-                cell.updateFavoriteButton(isFavorite: true)
+        guard let indexPath = homeView.collectionView.indexPath(for: cell) else { return }
+        let selectedProduct = homeViewModel.homeModels[indexPath.row]
+        
+        homeViewModel.addToFavorites(product: selectedProduct) { [weak self] isFavorite in
+            DispatchQueue.main.async {
+                if isFavorite {
+                    self?.showAlert(message: "Product added to favorites!")
+                } else {
+                    self?.showAlert(message: "Product removed from favorites!")
+                }
+                cell.updateFavoriteButton(isFavorite: isFavorite)
+                self?.homeView.collectionView.reloadData()
             }
-            
-            homeView.collectionView.reloadData()
         }
     }
 }
@@ -199,11 +199,11 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
 // MARK: - UISearchBarDelegate
 extension HomeViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        homeViewModel.searchProducts(query: searchText) { result in
+        homeViewModel.searchProducts(query: searchText) { [weak self] result in
             switch result {
             case .success:
                 DispatchQueue.main.async {
-                    self.homeView.collectionView.reloadData()
+                    self?.homeView.collectionView.reloadData()
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -231,6 +231,7 @@ extension HomeViewController: DetailViewControllerDelegate {
         homeView.collectionView.reloadData()
         updateBadgeValue()
     }
+    
     func didUpdateFavorites() {
         homeView.collectionView.reloadData()
     }
@@ -244,5 +245,9 @@ extension HomeViewController: HomeViewDelegate {
         let filterViewController = FilterViewController(viewModel: filterViewModel)
         filterViewController.modalPresentationStyle = .fullScreen
         present(filterViewController, animated: true, completion: nil)
+    }
+    
+    func didSelectProduct(_ product: Product) {
+        navigateToProductDetail(product)
     }
 }

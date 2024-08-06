@@ -41,6 +41,26 @@ class CartView: UIView {
         button.layer.cornerRadius = 8
         return button
     }()
+    
+    let emptyView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        
+        let messageLabel = UILabel()
+        messageLabel.text = "Your cart is empty"
+        messageLabel.textColor = .black
+        messageLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        messageLabel.textAlignment = .center
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(messageLabel)
+        messageLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        messageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -73,28 +93,41 @@ class CartView: UIView {
         view.backgroundColor = .white
         addSubview(view)
         view.anchor(top: tableView.bottomAnchor,
-                         left: leftAnchor,
-                         bottom: bottomAnchor, right: rightAnchor,
-                         paddingTop: 0,
-                         paddingLeft: 0,
-                         paddingBottom: 0)
+                    left: leftAnchor,
+                    bottom: bottomAnchor, right: rightAnchor,
+                    paddingTop: 0,
+                    paddingLeft: 0,
+                    paddingBottom: 0)
         
         addSubview(totalLabel)
         addSubview(completeButton)
         totalLabel.anchor(left: leftAnchor, bottom: bottomAnchor,
-                          paddingLeft: 16, paddingBottom: 100,
-                          width: 140, height: 44)
+                          paddingLeft: 10, paddingBottom: 100,
+                          width: 164, height: 44)
         
         completeButton.anchor(bottom: bottomAnchor, right: rightAnchor,
                               paddingBottom: 100, paddingRight: 16,
                               width: 140, height: 44)
         
         completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
+        
+        addSubview(emptyView)
+        emptyView.anchor(top: headerView.bottomAnchor,
+                         left: leftAnchor,
+                         bottom: bottomAnchor,
+                         right: rightAnchor)
+        emptyView.isHidden = true
     }
     
     func updateTotalPrice(with price: String) {
         totalLabel.text = "Total: $\(price)"
     }
+    
+    func updateCartView(isEmpty: Bool) {
+        tableView.isHidden = isEmpty
+        emptyView.isHidden = !isEmpty
+    }
+    
     @objc private func completeButtonTapped() {
         CartManager.shared.clearCart()
     }

@@ -19,7 +19,7 @@ class FavoritesView: UIView {
     
     let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(ProductTableViewCell.self, forCellReuseIdentifier: "productCell")
+        tableView.register(FavoriteProductTableViewCell.self, forCellReuseIdentifier: "favoriteProductCell")
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = .white
         return tableView
@@ -31,6 +31,25 @@ class FavoritesView: UIView {
         label.textAlignment = .center
         label.textColor = .black
         return label
+    }()
+    
+    let emptyView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        
+        let messageLabel = UILabel()
+        messageLabel.text = "No Favorites Yet"
+        messageLabel.textColor = .black
+        messageLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        messageLabel.textAlignment = .center
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(messageLabel)
+        messageLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        messageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
     }()
     
     // MARK: - Initializer
@@ -50,9 +69,9 @@ class FavoritesView: UIView {
         addSubview(tableView)
         
         headerView.anchor(top: safeAreaLayoutGuide.topAnchor,
-                                      left: leftAnchor,
-                                      right: rightAnchor,
-                                      height: 60)
+                          left: leftAnchor,
+                          right: rightAnchor,
+                          height: 60)
         
         tableView.anchor(top: headerView.bottomAnchor,
                          left: leftAnchor,
@@ -65,11 +84,11 @@ class FavoritesView: UIView {
         view.backgroundColor = .white
         addSubview(view)
         view.anchor(top: tableView.bottomAnchor,
-                         left: leftAnchor,
-                         bottom: bottomAnchor, right: rightAnchor,
-                         paddingTop: 0,
-                         paddingLeft: 0,
-                         paddingBottom: 0)
+                    left: leftAnchor,
+                    bottom: bottomAnchor, right: rightAnchor,
+                    paddingTop: 0,
+                    paddingLeft: 0,
+                    paddingBottom: 0)
         
         addSubview(totalLabel)
         totalLabel.anchor(left: leftAnchor, bottom: bottomAnchor,
@@ -77,9 +96,22 @@ class FavoritesView: UIView {
                           paddingLeft: 16, paddingBottom: 100,
                           paddingRight: 16,
                           height: 44)
+        
+        // Add the empty view
+        addSubview(emptyView)
+        emptyView.anchor(top: headerView.bottomAnchor,
+                         left: leftAnchor,
+                         bottom: bottomAnchor,
+                         right: rightAnchor)
+        emptyView.isHidden = true // Start with emptyView hidden
     }
     
     func updateTotalFavorites(with total: String) {
         totalLabel.text = "Favorites: \(total)"
+    }
+    
+    func updateFavoritesView(isEmpty: Bool) {
+        tableView.isHidden = isEmpty
+        emptyView.isHidden = !isEmpty
     }
 }

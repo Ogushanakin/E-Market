@@ -7,11 +7,18 @@
 
 import UIKit
 
+protocol FilterViewControllerDelegate: AnyObject {
+    func didSelectBrands(_ brands: [String])
+}
+
 class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    weak var delegate: FilterViewControllerDelegate?
     private let viewModel: FilterViewModelProtocol
     private let tableView = UITableView()
     private let dismissButton = UIButton(type: .system)
+    
+    private var selectedBrands: Set<String> = []
     
     init(viewModel: FilterViewModelProtocol) {
         self.viewModel = viewModel
@@ -35,7 +42,8 @@ class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDa
         view.addSubview(tableView)
         view.addSubview(dismissButton)
         
-        dismissButton.setTitle("Dismiss", for: .normal)
+        dismissButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+        dismissButton.tintColor = .black
         dismissButton.addTarget(self, action: #selector(dismissButtonTapped), for: .touchUpInside)
     }
     
@@ -43,15 +51,16 @@ class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.translatesAutoresizingMaskIntoConstraints = false
         dismissButton.translatesAutoresizingMaskIntoConstraints = false
         
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
-            dismissButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16)
-        ])
+        dismissButton.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                             left: view.leftAnchor,
+                             paddingTop: 10,
+                             paddingLeft: 10,
+                             width: 50, height: 50)
+        tableView.anchor(top: dismissButton.bottomAnchor,
+                         left: view.leftAnchor,
+                         bottom: view.bottomAnchor, right: view.rightAnchor,
+                         paddingTop: 20,
+                         paddingLeft: 0, paddingBottom: 150, paddingRight: 0)
     }
     
     private func configureTableView() {
@@ -68,29 +77,39 @@ class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     self?.tableView.reloadData()
                 }
             case .failure(let error):
-                // Handle error (show alert, etc.)
                 print("Failed to fetch brands: \(error)")
             }
         }
     }
     
     @objc private func dismissButtonTapped() {
+        delegate?.didSelectBrands(Array(selectedBrands))
         dismiss(animated: true, completion: nil)
     }
     
     // MARK: - UITableViewDataSource
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.brands.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = viewModel.brands[indexPath.row]
+        let brand = viewModel.brands[indexPath.row]
+        cell.textLabel?.text = brand
+        cell.accessoryType = selectedBrands.contains(brand) ? .checkmark : .none
         return cell
     }
     
     // MARK: - UITableViewDelegate
-    
-    // Implement delegate methods if needed
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedBrand = viewModel.brands[indexPath.row]
+        
+        if selectedBrands.contains(selectedBrand) {
+            selectedBrands.remove(selectedBrand)
+        } else {
+            selectedBrands.insert(selectedBrand)
+        }
+        
+        tableView.reloadRows(at: [indexPath], with: .automatic)
+    }
 }
