@@ -7,9 +7,43 @@
 
 import UIKit
 
+class HeaderView: UIView {
+    
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "E-Market"
+        label.textColor = .white
+        label.font = UIFont.boldSystemFont(ofSize: 30)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupUI() {
+        backgroundColor = .systemBlue
+        addSubview(titleLabel)
+        
+        titleLabel.centerX(inView: self)
+        titleLabel.centerY(inView: self)
+    }
+}
+
 class HomeView: UIView {
     
-    // UI Components
+    let headerView: HeaderView = {
+        let view = HeaderView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Search"
@@ -65,7 +99,8 @@ class HomeView: UIView {
     }
     
     private func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .systemBlue
+        addSubview(headerView)
         addSubview(searchBar)
         addSubview(horizontalStackView)
         addSubview(collectionView)
@@ -73,24 +108,28 @@ class HomeView: UIView {
         horizontalStackView.addArrangedSubview(filterLabel)
         horizontalStackView.addArrangedSubview(filterButton)
         
-        searchBar.anchor(top: safeAreaLayoutGuide.topAnchor,
-                         left: leftAnchor,
-                         right: rightAnchor,
-                         paddingTop: 0,
-                         paddingLeft: 0,
-                         paddingRight: 0)
+        // Set up constraints for headerView
+        headerView.anchor(top: safeAreaLayoutGuide.topAnchor,
+                          left: leftAnchor,
+                          right: rightAnchor,
+                          height: 60)
         
+        // Set up constraints for searchBar
+        searchBar.anchor(top: headerView.bottomAnchor,
+                         left: leftAnchor,
+                         right: rightAnchor)
+        
+        // Set up constraints for horizontalStackView
         horizontalStackView.anchor(top: searchBar.bottomAnchor,
                                    left: leftAnchor,
                                    right: rightAnchor,
-                                   paddingTop: 8,
-                                   paddingLeft: 16,
-                                   paddingRight: 16)
+                                   paddingTop: 0)
         
+        // Set up constraints for collectionView
         collectionView.anchor(top: horizontalStackView.bottomAnchor,
                               left: leftAnchor,
                               bottom: bottomAnchor,
                               right: rightAnchor,
-                              paddingTop: 8)
+                              paddingTop: 0)
     }
 }

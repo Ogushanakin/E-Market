@@ -22,19 +22,19 @@ class HomeViewController: UIViewController {
         fetchMoreData()
         setupInfiniteScroll()
         configureNavBar()
-        setupCartUpdateObserver() // Observer'ı burada ayarla
+        setupCartUpdateObserver()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateBadgeValue()
-        homeView.collectionView.reloadData() // Koleksiyon görünümünü güncelle
+        homeView.collectionView.reloadData()
     }
 
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBlue
         view.addSubview(homeView)
-        homeView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+        homeView.anchor(top: view.topAnchor,
                         left: view.leftAnchor,
                         bottom: view.bottomAnchor,
                         right: view.rightAnchor)
@@ -48,13 +48,12 @@ class HomeViewController: UIViewController {
     }
     
     private func configureNavBar() {
-        navigationController?.navigationBar.backgroundColor = .systemBlue
-        navigationController?.isNavigationBarHidden = false
-        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationController?.isNavigationBarHidden = true
+        navigationController?.navigationBar.isHidden = true
     }
     
     private func setupBindings() {
-        // Add any bindings or additional setups for your view and viewModel here
+
     }
     
     private func fetchMoreData() {
@@ -91,7 +90,7 @@ class HomeViewController: UIViewController {
     }
     
     @objc private func filterButtonTapped() {
-        // Implement filter functionality
+
     }
     
     private func setupCartUpdateObserver() {
@@ -183,7 +182,6 @@ extension HomeViewController: UISearchBarDelegate {
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
-                    // Show error message
                     print("Search failed: \(error.localizedDescription)")
                 }
             }
@@ -197,7 +195,7 @@ extension HomeViewController {
         let isInCart = CartManager.shared.isProductInCart(selectedProduct)
         let viewModel = DetailViewModel(product: selectedProduct, isInCart: isInCart)
         let productDetailVC = DetailViewController(viewModel: viewModel)
-        productDetailVC.delegate = self // Delegate ayarla
+        productDetailVC.delegate = self
         navigationController?.pushViewController(productDetailVC, animated: true)
     }
 }
@@ -205,7 +203,7 @@ extension HomeViewController {
 // MARK: - DetailViewControllerDelegate
 extension HomeViewController: DetailViewControllerDelegate {
     func didUpdateCart() {
-        homeView.collectionView.reloadData() // Sepet güncellemeleri yapıldığında koleksiyon görünümünü yeniden yükleyin
+        homeView.collectionView.reloadData()
         updateBadgeValue()
     }
 }

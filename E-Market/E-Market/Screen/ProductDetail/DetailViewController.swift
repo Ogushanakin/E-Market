@@ -32,6 +32,7 @@ class DetailViewController: UIViewController, DetailViewModelDelegate {
         view.backgroundColor = .white
         setupUI()
         setupBindings()
+        configureNavBar()
         NotificationCenter.default.addObserver(self, selector: #selector(cartDidUpdate), name: CartManager.shared.cartDidUpdateNotification, object: nil)
     }
     
@@ -44,7 +45,10 @@ class DetailViewController: UIViewController, DetailViewModelDelegate {
         
         detailView.addToCartButton.addTarget(self, action: #selector(addToCartButtonTapped), for: .touchUpInside)
     }
-    
+    private func configureNavBar() {
+        navigationController?.isNavigationBarHidden = true
+        navigationController?.navigationBar.isHidden = true
+    }
     private func setupBindings() {
         detailView.configure(with: viewModel)
         updateButtonTitle()

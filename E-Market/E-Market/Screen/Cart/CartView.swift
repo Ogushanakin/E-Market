@@ -14,6 +14,7 @@ class CartView: UIView {
         let tableView = UITableView()
         tableView.register(ProductTableViewCell.self, forCellReuseIdentifier: "productCell")
         tableView.tableFooterView = UIView()
+        tableView.backgroundColor = .white
         return tableView
     }()
     

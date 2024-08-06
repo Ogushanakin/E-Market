@@ -16,6 +16,7 @@ class CartViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupBindings()
+        configureNavBar()
         viewModel.onCartUpdated = { [weak self] in
             self?.updateUI()
         }
@@ -35,7 +36,10 @@ class CartViewController: UIViewController {
         // Register the cell class or nib
         cartView.tableView.register(ProductTableViewCell.self, forCellReuseIdentifier: "productCell")
     }
-    
+    private func configureNavBar() {
+        navigationController?.isNavigationBarHidden = true
+        navigationController?.navigationBar.isHidden = true
+    }
     private func setupBindings() {
         // No need to set delegate and dataSource here as it's already done in setupView
         cartView.tableView.reloadData()

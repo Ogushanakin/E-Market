@@ -16,7 +16,6 @@ class ProductCollectionViewCell: UICollectionViewCell {
     
     static let reuseIdentifier = "ProductCell"
     
-    // UI Components
     private let productImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -49,7 +48,6 @@ class ProductCollectionViewCell: UICollectionViewCell {
     
     weak var delegate: ProductCollectionViewCellDelegate?
     
-    // Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -60,7 +58,6 @@ class ProductCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // UI Setup
     private func setupUI() {
         contentView.addSubview(productImageView)
         contentView.addSubview(nameLabel)

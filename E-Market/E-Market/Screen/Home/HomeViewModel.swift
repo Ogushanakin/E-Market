@@ -12,7 +12,6 @@ class HomeViewModel {
     private let productService = ProductService.shared
     var homeModels: [HomeModel] = []
     
-    // Fetch more products with pagination
     func fetchMoreProducts(completion: @escaping (Result<Void, Error>) -> Void) {
         productService.fetchMoreProducts { [weak self] result in
             guard let self = self else {
@@ -30,7 +29,6 @@ class HomeViewModel {
         }
     }
     
-    // Search products with a query
     func searchProducts(query: String, completion: @escaping (Result<Void, Error>) -> Void) {
         productService.searchProducts(query: query) { [weak self] result in
             guard let self = self else {
