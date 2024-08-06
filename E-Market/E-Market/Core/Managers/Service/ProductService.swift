@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ProductService {
+class ProductService: ProductServiceProtocol {
     
     static let shared = ProductService()
     private var currentPage = 0

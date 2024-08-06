@@ -11,7 +11,7 @@ protocol DetailViewControllerDelegate: AnyObject {
     func didUpdateCart()
 }
 
-class DetailViewController: UIViewController, DetailViewModelDelegate {
+class DetailViewController: UIViewController, DetailViewModelDelegate, DetailViewDelegate {
     
     private let detailView = DetailView()
     private var viewModel: DetailViewModel!
@@ -21,6 +21,7 @@ class DetailViewController: UIViewController, DetailViewModelDelegate {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         self.viewModel.delegate = self
+        detailView.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -29,7 +30,7 @@ class DetailViewController: UIViewController, DetailViewModelDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBlue
         setupUI()
         setupBindings()
         configureNavBar()
@@ -66,6 +67,10 @@ class DetailViewController: UIViewController, DetailViewModelDelegate {
     private func updateButtonTitle() {
         let buttonTitle = viewModel.isInCart ? "Remove from Cart" : "Add to Cart"
         detailView.addToCartButton.setTitle(buttonTitle, for: .normal)
+    }
+    
+    func didTapBackButton() {
+        navigationController?.popViewController(animated: true)
     }
     
     func didUpdatePrice(_ price: String) {

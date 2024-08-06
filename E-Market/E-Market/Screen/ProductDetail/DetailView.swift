@@ -6,11 +6,29 @@
 //
 
 import UIKit
-import SDWebImage
+
+protocol DetailViewDelegate: AnyObject {
+    func didTapBackButton()
+}
 
 class DetailView: UIView {
     
-    // UI Elements
+    weak var delegate: DetailViewDelegate?
+    
+    let headerView: HeaderView = {
+        let view = HeaderView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    let backButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "backButton"), for: .normal)
+        button.tintColor = .black
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .lightGray
@@ -81,7 +99,6 @@ class DetailView: UIView {
         return button
     }()
     
-    // Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -92,23 +109,32 @@ class DetailView: UIView {
     }
     
     private func setupUI() {
-        // Add subviews
+        backgroundColor = .white
+        addSubview(headerView)
+        addSubview(backButton)
         addSubview(imageView)
         addSubview(titleLabel)
         addSubview(descriptionLabel)
         addSubview(horizontalStackView)
         
-        // Add subviews to the horizontal stack view
         horizontalStackView.addArrangedSubview(priceStackView)
         horizontalStackView.addArrangedSubview(addToCartButton)
         
-        // Add subviews to the vertical stack view
         priceStackView.addArrangedSubview(priceLabel)
         priceStackView.addArrangedSubview(priceValueLabel)
         
-        // Set constraints using anchor method
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: topAnchor, constant: 40),
+            headerView.topAnchor.constraint(equalTo: topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            headerView.heightAnchor.constraint(equalToConstant: 60),
+            
+            backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            backButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            backButton.widthAnchor.constraint(equalToConstant: 30),
+            backButton.heightAnchor.constraint(equalToConstant: 30),
+            
+            imageView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 20),
             imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             imageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             imageView.heightAnchor.constraint(equalToConstant: 200),
@@ -126,10 +152,15 @@ class DetailView: UIView {
             horizontalStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             horizontalStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)
         ])
+        
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func backButtonTapped() {
+        delegate?.didTapBackButton()
     }
     
     func configure(with viewModel: DetailViewModel) {
-        // Load image asynchronously
         if let imageUrl = URL(string: viewModel.productImageUrl) {
             imageView.sd_setImage(with: imageUrl, placeholderImage: UIImage(named: "placeholder")) { [weak self] image, error, cacheType, url in
                 if let error = error {
@@ -140,11 +171,10 @@ class DetailView: UIView {
             imageView.image = UIImage(named: "placeholder")
         }
         
-        // Configure labels and button
         titleLabel.text = viewModel.productName
         descriptionLabel.text = viewModel.productDescription
         priceValueLabel.text = viewModel.productPrice
         addToCartButton.setTitle(viewModel.isInCart ? "Remove from Cart" : "Add to Cart", for: .normal)
+        headerView.titleLabel.text = viewModel.productName
     }
-
 }

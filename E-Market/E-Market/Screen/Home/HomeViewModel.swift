@@ -8,34 +8,27 @@
 import Foundation
 
 class HomeViewModel {
-    
-    private let productService = ProductService.shared
+    private let productService: ProductServiceProtocol
     var homeModels: [HomeModel] = []
     
+    init(productService: ProductServiceProtocol) {
+        self.productService = productService
+    }
+
     func fetchMoreProducts(completion: @escaping (Result<Void, Error>) -> Void) {
-        productService.fetchMoreProducts { [weak self] result in
-            guard let self = self else {
-                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "ViewModel deallocated"])))
-                return
-            }
-            
+        productService.fetchMoreProducts { result in
             switch result {
-            case .success(let newProducts):
-                self.homeModels.append(contentsOf: newProducts)
+            case .success(let products):
+                self.homeModels.append(contentsOf: products)
                 completion(.success(()))
             case .failure(let error):
                 completion(.failure(error))
             }
         }
     }
-    
+
     func searchProducts(query: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        productService.searchProducts(query: query) { [weak self] result in
-            guard let self = self else {
-                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "ViewModel deallocated"])))
-                return
-            }
-            
+        productService.searchProducts(query: query) { result in
             switch result {
             case .success(let products):
                 self.homeModels = products

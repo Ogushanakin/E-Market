@@ -10,8 +10,8 @@ import UIScrollView_InfiniteScroll
 
 class HomeViewController: UIViewController {
     
-    private let homeView = HomeView()
-    private var homeViewModel = HomeViewModel()
+    internal let homeView = HomeView()
+    internal var homeViewModel: HomeViewModel!
     private var isLoading = false
     private var cartUpdateObserver: NSObjectProtocol?
 
@@ -53,20 +53,21 @@ class HomeViewController: UIViewController {
     }
     
     private func setupBindings() {
-
+        let productService: ProductServiceProtocol = ProductService.shared
+        homeViewModel = HomeViewModel(productService: productService)
     }
     
     private func fetchMoreData() {
         guard !isLoading else { return }
-        
+
         isLoading = true
-        
+
         homeViewModel.fetchMoreProducts { [weak self] result in
             guard let self = self else { return }
-            
+
             DispatchQueue.main.async {
                 self.isLoading = false
-                
+
                 switch result {
                 case .success:
                     self.homeView.collectionView.reloadData()
@@ -80,6 +81,10 @@ class HomeViewController: UIViewController {
         }
     }
     
+    func triggerFetchMoreDataForTesting(completion: @escaping () -> Void) {
+        fetchMoreData()
+        completion()
+    }
     private func setupInfiniteScroll() {
         homeView.collectionView.addInfiniteScroll { [weak self] _ in
             guard let self = self else { return }
@@ -115,7 +120,7 @@ class HomeViewController: UIViewController {
 
 // MARK: - ProductCollectionViewCellDelegate
 extension HomeViewController: ProductCollectionViewCellDelegate {
-    func didSelectFavorite(cell: ProductCollectionViewCell) {
+    func didSelectAddToCart(cell: ProductCollectionViewCell) {
         if let indexPath = homeView.collectionView.indexPath(for: cell) {
             let selectedProduct = homeViewModel.homeModels[indexPath.row]
             let isInCart = CartManager.shared.isProductInCart(selectedProduct)
@@ -133,6 +138,27 @@ extension HomeViewController: ProductCollectionViewCellDelegate {
             homeView.collectionView.reloadData()
         }
     }
+    
+    func didSelectFavorite(cell: ProductCollectionViewCell) {
+        if let indexPath = homeView.collectionView.indexPath(for: cell) {
+            let selectedProduct = homeViewModel.homeModels[indexPath.row]
+            let isFavorite = FavoriteManager.shared.isProductInCart(selectedProduct)
+            
+            if isFavorite {
+                FavoriteManager.shared.removeFromCart(item: selectedProduct)
+                showAlert(message: "Product removed from favorites!")
+                cell.updateFavoriteButton(isFavorite: false)
+            } else {
+                FavoriteManager.shared.addToCart(item: selectedProduct)
+                showAlert(message: "Product added to favorites!")
+                cell.updateFavoriteButton(isFavorite: true)
+            }
+            
+            // Reload the collection view data
+            homeView.collectionView.reloadData()
+        }
+    }
+    
 }
 
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
@@ -205,5 +231,8 @@ extension HomeViewController: DetailViewControllerDelegate {
     func didUpdateCart() {
         homeView.collectionView.reloadData()
         updateBadgeValue()
+    }
+    func didUpdateFavorites() {
+        homeView.collectionView.reloadData()
     }
 }

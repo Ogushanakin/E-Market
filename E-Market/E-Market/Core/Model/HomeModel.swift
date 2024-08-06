@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct HomeModel: Codable {
+struct HomeModel: Codable, Equatable {
     let createdAt: String?
     let name: String?
     let image: String?
@@ -16,18 +16,31 @@ struct HomeModel: Codable {
     let model: String?
     let brand: String?
     let id: String?
-    var count: Int = 1 // Miktar için varsayılan bir değer ekleyebiliriz
+    var count: Int
 
     enum CodingKeys: String, CodingKey {
-        case createdAt = "createdAt"
-        case name = "name"
-        case image = "image"
-        case price = "price"
-        case description = "description"
-        case model = "model"
-        case brand = "brand"
-        case id = "id"
-        case count = "count" // Opsiyonel bir alan ekleyebiliriz
+        case createdAt
+        case name
+        case image
+        case price
+        case description
+        case model
+        case brand
+        case id
+        case count
+    }
+
+    // Custom initializer for manual instantiation
+    init(createdAt: String? = nil, name: String? = nil, image: String? = nil, price: String? = nil, description: String? = nil, model: String? = nil, brand: String? = nil, id: String? = nil, count: Int = 1) {
+        self.createdAt = createdAt
+        self.name = name
+        self.image = image
+        self.price = price
+        self.description = description
+        self.model = model
+        self.brand = brand
+        self.id = id
+        self.count = count
     }
 
     init(from decoder: Decoder) throws {
@@ -40,7 +53,6 @@ struct HomeModel: Codable {
         model = try values.decodeIfPresent(String.self, forKey: .model)
         brand = try values.decodeIfPresent(String.self, forKey: .brand)
         id = try values.decodeIfPresent(String.self, forKey: .id)
-        count = try values.decodeIfPresent(Int.self, forKey: .count) ?? 1 // Varsayılan değer olarak 1
+        count = try values.decodeIfPresent(Int.self, forKey: .count) ?? 1
     }
 }
-

@@ -1,28 +1,26 @@
 //
-//  CartManager.swift
+//  FavoriteManager.swift
 //  E-Market
 //
-//  Created by Oğuzhan Akın on 5.08.2024.
+//  Created by Oğuzhan Akın on 6.08.2024.
 //
 
-import Foundation
-import UIKit
 import CoreData
 
-class CartManager {
-    static let shared = CartManager()
+class FavoriteManager {
+    static let shared = FavoriteManager()
     
-    private let cartKey = "cart"
-    let cartDidUpdateNotification = Notification.Name("CartDidUpdate")
+    private let cartKey = "favorites"
+    let cartDidUpdateNotification = Notification.Name("FavoriteDidUpdate")
     
     private init() {}
     
     var cartItems: [HomeModel] {
-        return getCart()
+        return getFavorites()
     }
     
     func addToCart(item: HomeModel) {
-        var currentCart = getCart()
+        var currentCart = getFavorites()
         if let index = currentCart.firstIndex(where: { $0.id == item.id }) {
             currentCart[index].count += 1
         } else {
@@ -36,7 +34,7 @@ class CartManager {
 
     
     func removeFromCart(item: HomeModel) {
-        var currentCart = getCart()
+        var currentCart = getFavorites()
         if let index = currentCart.firstIndex(where: { $0.id == item.id }) {
             if currentCart[index].count > 1 {
                 currentCart[index].count -= 1
@@ -55,7 +53,7 @@ class CartManager {
     
     // MARK: - Private Methods
     
-    private func getCart() -> [HomeModel] {
+    private func getFavorites() -> [HomeModel] {
         if let data = UserDefaults.standard.data(forKey: cartKey) {
             do {
                 let decoder = JSONDecoder()
@@ -79,7 +77,7 @@ class CartManager {
     }
     
     func isProductInCart(_ product: HomeModel) -> Bool {
-        let currentCart = getCart()
+        let currentCart = getFavorites()
         return currentCart.contains { $0.id == product.id }
     }
 }

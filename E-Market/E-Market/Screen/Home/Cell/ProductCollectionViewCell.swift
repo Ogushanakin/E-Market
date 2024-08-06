@@ -9,6 +9,7 @@ import UIKit
 import SDWebImage
 
 protocol ProductCollectionViewCellDelegate: AnyObject {
+    func didSelectAddToCart(cell: ProductCollectionViewCell)
     func didSelectFavorite(cell: ProductCollectionViewCell)
 }
 
@@ -16,20 +17,20 @@ class ProductCollectionViewCell: UICollectionViewCell {
     
     static let reuseIdentifier = "ProductCell"
     
-    private let productImageView: UIImageView = {
+    let productImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
-    private let priceLabel: UILabel = {
+    let priceLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
         label.textColor = .blue
         return label
     }()
     
-    private let nameLabel: UILabel = {
+    let nameLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
         label.numberOfLines = 0
@@ -37,12 +38,20 @@ class ProductCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private let addToCartButton: UIButton = {
+    let addToCartButton: UIButton = {
         let button = UIButton()
         button.setTitle("Add to Cart", for: .normal)
         button.backgroundColor = .blue
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 8
+        return button
+    }()
+    
+    let favoriteButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "heart"), for: .normal)
+        button.tintColor = .red
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -52,6 +61,7 @@ class ProductCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         setupUI()
         addToCartButton.addTarget(self, action: #selector(addToCartButtonTapped), for: .touchUpInside)
+        favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -63,6 +73,7 @@ class ProductCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(nameLabel)
         contentView.addSubview(priceLabel)
         contentView.addSubview(addToCartButton)
+        contentView.addSubview(favoriteButton)
         
         productImageView.anchor(top: contentView.topAnchor,
                                 left: contentView.leftAnchor,
@@ -89,6 +100,13 @@ class ProductCollectionViewCell: UICollectionViewCell {
                                paddingBottom: 10,
                                paddingRight: 10,
                                height: 36)
+        
+        favoriteButton.anchor(top: contentView.topAnchor,
+                              right: contentView.rightAnchor,
+                              paddingTop: 10,
+                              paddingRight: 10,
+                              width: 30,
+                              height: 30)
     }
     
     func configure(with model: HomeModel?) {
@@ -102,6 +120,7 @@ class ProductCollectionViewCell: UICollectionViewCell {
         }
         
         updateButtonTitle(isInCart: CartManager.shared.isProductInCart(model!))
+        updateFavoriteButton(isFavorite: FavoriteManager.shared.isProductInCart(model!))
     }
     
     func updateButtonTitle(isInCart: Bool) {
@@ -109,7 +128,16 @@ class ProductCollectionViewCell: UICollectionViewCell {
         addToCartButton.setTitle(title, for: .normal)
     }
     
+    func updateFavoriteButton(isFavorite: Bool) {
+        let imageName = isFavorite ? "Star 1" : "Star 2"
+        favoriteButton.setImage(UIImage(named: imageName), for: .normal)
+    }
+    
     @objc private func addToCartButtonTapped() {
+        delegate?.didSelectAddToCart(cell: self)
+    }
+    
+    @objc private func favoriteButtonTapped() {
         delegate?.didSelectFavorite(cell: self)
     }
 }

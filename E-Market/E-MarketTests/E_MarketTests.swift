@@ -11,26 +11,51 @@ import XCTest
 final class E_MarketTests: XCTestCase {
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        // Setup kodları buraya
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        // Teardown kodları buraya
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    func testHomeModelInitialization() throws {
+        // Given
+        let model = HomeModel(
+            createdAt: "2024-01-01",
+            name: "Test Product",
+            image: "image_url",
+            price: "10.0",
+            description: "Product description",
+            model: "Model X",
+            brand: "Brand Y",
+            id: "1",
+            count: 1
+        )
+        
+        // Then
+        XCTAssertNotNil(model)
+        XCTAssertEqual(model.name, "Test Product")
+        XCTAssertEqual(model.price, "10.0")
+        XCTAssertEqual(model.id, "1")
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
+    func testNetworkManagerPerformance() throws {
+        // Performans testi örneği
         self.measure {
-            // Put the code you want to measure the time of here.
+            // Ölçmek istediğiniz kod
+            let url = URL(string: "https://5fc9346b2af77700165ae514.mockapi.io/products")!
+            let expectation = self.expectation(description: "Network request")
+            
+            NetworkManager.shared.fetch(url: url, responseType: [HomeModel].self) { result in
+                switch result {
+                case .success:
+                    expectation.fulfill()
+                case .failure(let error):
+                    XCTFail("Network request failed: \(error.localizedDescription)")
+                }
+            }
+            
+            waitForExpectations(timeout: 5.0, handler: nil)
         }
     }
-
 }
