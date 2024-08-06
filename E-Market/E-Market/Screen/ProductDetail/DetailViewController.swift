@@ -13,7 +13,7 @@ protocol DetailViewControllerDelegate: AnyObject {
 
 class DetailViewController: UIViewController, DetailViewModelDelegate, DetailViewDelegate {
     
-    private let detailView = DetailView()
+    let detailView = DetailView()
     private var viewModel: DetailViewModel!
     weak var delegate: DetailViewControllerDelegate?
     
@@ -55,16 +55,16 @@ class DetailViewController: UIViewController, DetailViewModelDelegate, DetailVie
         updateButtonTitle()
     }
     
-    @objc private func addToCartButtonTapped() {
+    @objc func addToCartButtonTapped() {
         viewModel.toggleCartStatus()
         delegate?.didUpdateCart()
     }
     
-    @objc private func cartDidUpdate() {
+    @objc func cartDidUpdate() {
         updateButtonTitle()
     }
     
-    private func updateButtonTitle() {
+    func updateButtonTitle() {
         let buttonTitle = viewModel.isInCart ? "Remove from Cart" : "Add to Cart"
         detailView.addToCartButton.setTitle(buttonTitle, for: .normal)
     }

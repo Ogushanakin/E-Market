@@ -13,12 +13,12 @@ protocol DetailViewModelDelegate: AnyObject {
 }
 
 class DetailViewModel {
-    // Properties
+
     let product: Product
-    var isInCart: Bool {
+    private(set) var isInCart: Bool {
         didSet {
-            let buttonTitle = isInCart ? "Remove from Cart" : "Add to Cart"
-            delegate?.didUpdateButtonTitle(buttonTitle)
+            // Notify delegate about the button title change
+            delegate?.didUpdateButtonTitle(isInCart ? "Remove from Cart" : "Add to Cart")
         }
     }
     

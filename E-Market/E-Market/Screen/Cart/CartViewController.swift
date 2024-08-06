@@ -9,8 +9,8 @@ import UIKit
 
 class CartViewController: UIViewController {
     
-    private let viewModel = CartViewModel()
-    private let cartView = CartView()
+    var viewModel = CartViewModel()
+    let cartView = CartView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +45,7 @@ class CartViewController: UIViewController {
         cartView.tableView.reloadData()
     }
     
-    private func updateUI() {
+    func updateUI() {
         let isCartEmpty = viewModel.cartItems.isEmpty
         cartView.updateCartView(isEmpty: isCartEmpty)
         cartView.tableView.reloadData()

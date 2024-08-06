@@ -9,7 +9,11 @@ import Foundation
 import UIKit
 import CoreData
 
-class CartManager {
+protocol CartManaging {
+    func clearCart()
+}
+
+class CartManager: CartManaging {
     static let shared = CartManager()
     
     private let cartKey = "cart"

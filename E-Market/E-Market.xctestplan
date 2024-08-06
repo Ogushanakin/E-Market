@@ -1,0 +1,37 @@
+{
+  "configurations" : [
+    {
+      "id" : "AFAFC7B9-A2AA-48E2-AAD0-016FFFD9B6A9",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:E-Market.xcodeproj",
+      "identifier" : "214CC7982C612BE9002ED61D",
+      "name" : "E-Market"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:E-Market.xcodeproj",
+        "identifier" : "214CC7B12C612BEB002ED61D",
+        "name" : "E-MarketTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:E-Market.xcodeproj",
+        "identifier" : "214CC7BB2C612BEB002ED61D",
+        "name" : "E-MarketUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
