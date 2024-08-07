@@ -10,48 +10,11 @@ import Foundation
 class HomeViewModel {
     private let productService: ProductServiceProtocol
     var homeModels: [Product] = []
+    var sortOption: String?
+    var filterBrands: [String] = []
     
     init(productService: ProductServiceProtocol) {
         self.productService = productService
-    }
-    
-    func fetchMoreProducts(completion: @escaping (Result<Void, Error>) -> Void) {
-        productService.fetchMoreProducts { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let products):
-                self.homeModels.append(contentsOf: products)
-                completion(.success(()))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    func searchProducts(query: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        productService.searchProducts(query: query) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let products):
-                self.homeModels = products
-                completion(.success(()))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    func filterProducts(by brands: Set<String>, completion: @escaping (Result<Void, Error>) -> Void) {
-        productService.fetchAllProducts { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let products):
-                self.homeModels = products.filter { brands.contains($0.brand ?? "") }
-                completion(.success(()))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
     }
     
     func addToCart(product: Product, completion: @escaping (Bool) -> Void) {
@@ -71,6 +34,87 @@ class HomeViewModel {
         } else {
             FavoriteManager.shared.addToCart(item: product)
             completion(true)
+        }
+    }
+    
+    func fetchMoreProducts(completion: @escaping (Result<Void, Error>) -> Void) {
+        productService.fetchMoreProducts { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let products):
+                self.homeModels.append(contentsOf: products)
+                self.applySorting()
+                completion(.success(()))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func searchProducts(query: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        productService.searchProducts(query: query) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let products):
+                self.homeModels = products
+                self.applySorting()
+                completion(.success(()))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func applySorting() {
+        var filteredProducts = homeModels
+        
+        if !filterBrands.isEmpty {
+            filteredProducts = filteredProducts.filter { product in
+                guard let brand = product.brand else { return false }
+                return filterBrands.contains(brand)
+            }
+        }
+        
+        guard let sortOption = sortOption else {
+            homeModels = filteredProducts
+            return
+        }
+        
+        switch sortOption {
+        case "Old to New":
+            homeModels = filteredProducts.sorted { product1, product2 in
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+                let date1 = dateFormatter.date(from: product1.createdAt ?? "") ?? Date.distantPast
+                let date2 = dateFormatter.date(from: product2.createdAt ?? "") ?? Date.distantPast
+                return date1 < date2
+            }
+            
+        case "New to Old":
+            homeModels = filteredProducts.sorted { product1, product2 in
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+                let date1 = dateFormatter.date(from: product1.createdAt ?? "") ?? Date.distantPast
+                let date2 = dateFormatter.date(from: product2.createdAt ?? "") ?? Date.distantPast
+                return date1 > date2
+            }
+            
+        case "Price High to Low":
+            homeModels = filteredProducts.sorted { product1, product2 in
+                let price1 = product1.priceAsDouble ?? 0
+                let price2 = product2.priceAsDouble ?? 0
+                return price1 > price2
+            }
+            
+        case "Price Low to High":
+            homeModels = filteredProducts.sorted { product1, product2 in
+                let price1 = product1.priceAsDouble ?? 0
+                let price2 = product2.priceAsDouble ?? 0
+                return price1 < price2
+            }
+            
+        default:
+            homeModels = filteredProducts
         }
     }
 }

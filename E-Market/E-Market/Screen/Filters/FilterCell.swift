@@ -17,8 +17,8 @@ class FilterTableViewCell: UITableViewCell {
     
     private let checkBox: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "circle"), for: .normal) // Empty circle for unchecked
-        button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .selected) // Filled circle for checked
+        button.setImage(UIImage(systemName: "circle"), for: .normal)
+        button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .selected)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -61,6 +61,5 @@ class FilterTableViewCell: UITableViewCell {
     
     @objc private func checkBoxTapped() {
         checkBox.isSelected.toggle()
-        // Notify delegate or handle the checkbox state change
     }
 }

@@ -244,10 +244,27 @@ extension HomeViewController: HomeViewDelegate {
         let filterViewModel = FilterViewModel(productService: productService)
         let filterViewController = FilterViewController(viewModel: filterViewModel)
         filterViewController.modalPresentationStyle = .fullScreen
+        filterViewController.delegate = self
         present(filterViewController, animated: true, completion: nil)
     }
     
     func didSelectProduct(_ product: Product) {
         navigateToProductDetail(product)
+    }
+}
+
+// MARK: - FilterViewControllerDelegate
+extension HomeViewController: FilterViewControllerDelegate {
+    func didSelectSortOption(_ sortOption: String) {
+        homeViewModel.sortOption = sortOption
+        homeViewModel.applySorting()
+        homeView.collectionView.reloadData()
+    }
+
+    func didSelectBrands(_ brands: [String]) {
+        // Markalarla filtreleme işini yapın
+        homeViewModel.filterBrands = brands
+        homeViewModel.applySorting() // Marka filtreleme sonrası sıralama uygulanabilir
+        homeView.collectionView.reloadData()
     }
 }

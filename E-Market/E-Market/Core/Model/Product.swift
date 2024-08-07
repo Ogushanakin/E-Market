@@ -54,4 +54,9 @@ struct Product: Codable, Equatable {
         id = try values.decodeIfPresent(String.self, forKey: .id)
         count = try values.decodeIfPresent(Int.self, forKey: .count) ?? 1
     }
+
+    // Optional: Convert price to Double for sorting
+    var priceAsDouble: Double? {
+        return Double(price ?? "")
+    }
 }
