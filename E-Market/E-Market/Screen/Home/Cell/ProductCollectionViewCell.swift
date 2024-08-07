@@ -120,7 +120,7 @@ class ProductCollectionViewCell: UICollectionViewCell {
         }
         
         updateButtonTitle(isInCart: CartManager.shared.isProductInCart(model!))
-        updateFavoriteButton(isFavorite: FavoriteManager.shared.isProductInCart(model!))
+        updateFavoriteButton(isFavorite: FavoriteManager.shared.isProductInFavorites(model!))
     }
     
     func updateButtonTitle(isInCart: Bool) {

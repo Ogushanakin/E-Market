@@ -9,7 +9,6 @@ import UIKit
 
 class ProductTableViewCell: UITableViewCell {
 
-    // UI Components
     let nameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 16)

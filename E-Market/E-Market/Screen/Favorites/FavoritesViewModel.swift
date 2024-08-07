@@ -16,7 +16,6 @@ class FavoritesViewModel {
         return favoriteManager.cartItems
     }
     
-    // Notify view controller when favorites are updated
     var onFavoritesUpdated: (() -> Void)?
     
     init() {
@@ -32,10 +31,10 @@ class FavoritesViewModel {
     }
     
     func toggleFavorite(for product: Product) {
-        if favoriteManager.isProductInCart(product) {
-            favoriteManager.removeFromCart(item: product)
+        if favoriteManager.isProductInFavorites(product) {
+            favoriteManager.removeFromFavorite(item: product)
         } else {
-            favoriteManager.addToCart(item: product)
+            favoriteManager.addToFavorite(item: product)
         }
     }
 }

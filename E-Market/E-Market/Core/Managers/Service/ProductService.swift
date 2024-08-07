@@ -56,8 +56,7 @@ class ProductService: ProductServiceProtocol {
             }
         }
     }
-
-    // Yeni fonksiyon ekledik
+    
     func fetchAllProducts(completion: @escaping (Result<[Product], Error>) -> Void) {
         guard let url = URL(string: "https://5fc9346b2af77700165ae514.mockapi.io/products") else {
             completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
@@ -80,3 +79,4 @@ class ProductService: ProductServiceProtocol {
         }.resume()
     }
 }
+

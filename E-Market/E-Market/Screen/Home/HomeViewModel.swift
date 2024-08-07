@@ -28,11 +28,11 @@ class HomeViewModel {
     }
     
     func addToFavorites(product: Product, completion: @escaping (Bool) -> Void) {
-        if FavoriteManager.shared.isProductInCart(product) {
-            FavoriteManager.shared.removeFromCart(item: product)
+        if FavoriteManager.shared.isProductInFavorites(product) {
+            FavoriteManager.shared.removeFromFavorite(item: product)
             completion(false)
         } else {
-            FavoriteManager.shared.addToCart(item: product)
+            FavoriteManager.shared.addToFavorite(item: product)
             completion(true)
         }
     }

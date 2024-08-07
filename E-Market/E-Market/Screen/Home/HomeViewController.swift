@@ -29,16 +29,12 @@ class HomeViewController: UIViewController {
         super.viewWillAppear(animated)
         updateBadgeValue()
         homeView.collectionView.reloadData()
+        updateEmptyView()
     }
 
     private func setupView() {
         view.backgroundColor = .systemBlue
-        view.addSubview(homeView)
-        homeView.anchor(top: view.topAnchor,
-                        left: view.leftAnchor,
-                        bottom: view.bottomAnchor,
-                        right: view.rightAnchor)
-        
+        view = homeView
         homeView.collectionView.dataSource = self
         homeView.collectionView.delegate = self
         homeView.searchBar.delegate = self
@@ -57,6 +53,11 @@ class HomeViewController: UIViewController {
         homeViewModel = HomeViewModel(productService: productService)
     }
     
+    private func updateEmptyView() {
+        let isEmpty = homeViewModel.homeModels.isEmpty
+        homeView.showEmptyView(isEmpty)
+    }
+
     private func fetchMoreData() {
         guard !isLoading else { return }
 
@@ -71,6 +72,7 @@ class HomeViewController: UIViewController {
                 switch result {
                 case .success:
                     self.homeView.collectionView.reloadData()
+                    self.updateEmptyView()
                     self.homeView.collectionView.finishInfiniteScroll()
                     
                 case .failure(let error):
@@ -80,7 +82,7 @@ class HomeViewController: UIViewController {
             }
         }
     }
-    
+
     func triggerFetchMoreDataForTesting(completion: @escaping () -> Void) {
         fetchMoreData()
         completion()
@@ -204,6 +206,7 @@ extension HomeViewController: UISearchBarDelegate {
             case .success:
                 DispatchQueue.main.async {
                     self?.homeView.collectionView.reloadData()
+                    self?.updateEmptyView()
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -262,9 +265,8 @@ extension HomeViewController: FilterViewControllerDelegate {
     }
 
     func didSelectBrands(_ brands: [String]) {
-        // Markalarla filtreleme işini yapın
         homeViewModel.filterBrands = brands
-        homeViewModel.applySorting() // Marka filtreleme sonrası sıralama uygulanabilir
+        homeViewModel.applySorting()
         homeView.collectionView.reloadData()
     }
 }

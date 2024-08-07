@@ -35,11 +35,8 @@ class TabBarController: UITabBarController {
     }
     
     private func setupTabBar() {
-        // Tab bar'ı özel sınıfla yeniden oluşturma
         let customTabBar = CustomTabBar()
         setValue(customTabBar, forKey: "tabBar")
-        
-        // Tab bar'ın arka plan rengini ayarlama
         customTabBar.backgroundColor = .white
     }
 }

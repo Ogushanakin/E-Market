@@ -19,7 +19,7 @@ class FavoriteManager {
         return getFavorites()
     }
     
-    func addToCart(item: Product) {
+    func addToFavorite(item: Product) {
         var currentCart = getFavorites()
         if let index = currentCart.firstIndex(where: { $0.id == item.id }) {
             currentCart[index].count += 1
@@ -33,7 +33,7 @@ class FavoriteManager {
     }
 
     
-    func removeFromCart(item: Product) {
+    func removeFromFavorite(item: Product) {
         var currentCart = getFavorites()
         if let index = currentCart.firstIndex(where: { $0.id == item.id }) {
             if currentCart[index].count > 1 {
@@ -76,7 +76,7 @@ class FavoriteManager {
         }
     }
     
-    func isProductInCart(_ product: Product) -> Bool {
+    func isProductInFavorites(_ product: Product) -> Bool {
         let currentCart = getFavorites()
         return currentCart.contains { $0.id == product.id }
     }

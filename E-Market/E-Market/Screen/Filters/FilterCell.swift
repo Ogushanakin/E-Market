@@ -28,6 +28,7 @@ class FilterTableViewCell: UITableViewCell {
         setupSubviews()
         setupConstraints()
         checkBox.addTarget(self, action: #selector(checkBoxTapped), for: .touchUpInside)
+        checkBox.isUserInteractionEnabled = false
     }
     
     required init?(coder: NSCoder) {
@@ -44,13 +45,14 @@ class FilterTableViewCell: UITableViewCell {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            nameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            
-            checkBox.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            checkBox.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             checkBox.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             checkBox.widthAnchor.constraint(equalToConstant: 24),
-            checkBox.heightAnchor.constraint(equalToConstant: 24)
+            checkBox.heightAnchor.constraint(equalToConstant: 24),
+
+            nameLabel.leadingAnchor.constraint(equalTo: checkBox.trailingAnchor, constant: 16),
+            nameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
         ])
     }
     

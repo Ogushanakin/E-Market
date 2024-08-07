@@ -23,7 +23,7 @@ class FavoriteProductTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let removeButton: UIButton = {
+    private lazy var removeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Remove", for: .normal)
         button.addTarget(self, action: #selector(removeButtonTapped), for: .touchUpInside)

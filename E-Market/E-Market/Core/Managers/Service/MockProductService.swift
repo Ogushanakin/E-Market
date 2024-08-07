@@ -37,7 +37,6 @@ class MockProductService: ProductServiceProtocol {
         }
     }
     
-    // Bu fonksiyonun eklenmesi gerekebilir, eğer testlerinizde bu fonksiyonu kullanıyorsanız
     func fetchAllProducts(completion: @escaping (Result<[Product], Error>) -> Void) {
         if shouldReturnError {
             completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Mock error"])))

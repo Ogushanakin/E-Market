@@ -14,7 +14,18 @@ protocol HomeViewDelegate: AnyObject {
 
 class HomeView: UIView {
     weak var delegate: HomeViewDelegate?
-
+    
+    let emptyView: UILabel = {
+        let label = UILabel()
+        label.text = "No results found.\nYou can search from the search bar."
+        label.textColor = .gray
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 2
+        label.isHidden = true
+        return label
+    }()
+    
     let headerView: HeaderView = {
         let view = HeaderView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -85,7 +96,8 @@ class HomeView: UIView {
         addSubview(view)
         addSubview(horizontalStackView)
         addSubview(collectionView)
-        
+        addSubview(emptyView)
+
         horizontalStackView.addArrangedSubview(filterLabel)
         horizontalStackView.addArrangedSubview(filterButton)
         
@@ -106,6 +118,15 @@ class HomeView: UIView {
                                    right: rightAnchor,
                                    paddingTop: 10, paddingLeft: 20, paddingRight: 20)
         
+        emptyView.anchor(top: horizontalStackView.bottomAnchor,
+                                left: leftAnchor,
+                                bottom: bottomAnchor,
+                                right: rightAnchor,
+                                paddingTop: 20,
+                                paddingLeft: 20,
+                                paddingBottom: 20,
+                                paddingRight: 20)
+    
         collectionView.anchor(top: horizontalStackView.bottomAnchor,
                               left: leftAnchor,
                               bottom: bottomAnchor,
@@ -114,7 +135,9 @@ class HomeView: UIView {
         
         filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
     }
-    
+    func showEmptyView(_ show: Bool) {
+        emptyView.isHidden = !show
+    }
     @objc private func filterButtonTapped() {
         delegate?.didTapFilterButton()
     }

@@ -16,7 +16,6 @@ class CartViewModel {
         return cartManager.cartItems
     }
     
-    // Notify view controller when cart items are updated
     var onCartUpdated: (() -> Void)?
     
     init() {

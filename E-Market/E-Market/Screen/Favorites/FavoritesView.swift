@@ -97,13 +97,12 @@ class FavoritesView: UIView {
                           paddingRight: 16,
                           height: 44)
         
-        // Add the empty view
         addSubview(emptyView)
         emptyView.anchor(top: headerView.bottomAnchor,
                          left: leftAnchor,
                          bottom: bottomAnchor,
                          right: rightAnchor)
-        emptyView.isHidden = true // Start with emptyView hidden
+        emptyView.isHidden = true
     }
     
     func updateTotalFavorites(with total: String) {
