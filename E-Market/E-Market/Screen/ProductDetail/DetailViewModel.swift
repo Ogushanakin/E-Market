@@ -12,7 +12,7 @@ protocol DetailViewModelDelegate: AnyObject {
     func didUpdateButtonTitle(_ title: String)
 }
 
-final class DetailViewModel {
+class DetailViewModel {
 
     let product: Product
     private(set) var isInCart: Bool {
