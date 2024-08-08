@@ -133,13 +133,14 @@ extension HomeViewController: ProductCollectionViewCellDelegate {
         
         homeViewModel.addToCart(product: selectedProduct) { [weak self] isAdded in
             DispatchQueue.main.async {
+                guard let self = self else { return }
                 if isAdded {
-                    self?.showAlert(message: "Product added to cart!")
+                    self.showAlert(message: "Product added to cart!")
                 } else {
-                    self?.showAlert(message: "Product removed from cart!")
+                    self.showAlert(message: "Product removed from cart!")
                 }
                 cell.updateButtonTitle(isInCart: isAdded)
-                self?.homeView.collectionView.reloadData()
+                self.homeView.collectionView.reloadItems(at: [indexPath])
             }
         }
     }
@@ -150,13 +151,14 @@ extension HomeViewController: ProductCollectionViewCellDelegate {
         
         homeViewModel.addToFavorites(product: selectedProduct) { [weak self] isFavorite in
             DispatchQueue.main.async {
+                guard let self = self else { return }
                 if isFavorite {
-                    self?.showAlert(message: "Product added to favorites!")
+                    self.showAlert(message: "Product added to favorites!")
                 } else {
-                    self?.showAlert(message: "Product removed from favorites!")
+                    self.showAlert(message: "Product removed from favorites!")
                 }
                 cell.updateFavoriteButton(isFavorite: isFavorite)
-                self?.homeView.collectionView.reloadData()
+                self.homeView.collectionView.reloadItems(at: [indexPath])
             }
         }
     }

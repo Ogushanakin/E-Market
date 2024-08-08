@@ -37,7 +37,6 @@ class CartManager: CartManaging {
         saveCart(cart: currentCart)
         NotificationCenter.default.post(name: cartDidUpdateNotification, object: nil)
     }
-
     
     func removeFromCart(item: Product) {
         var currentCart = getCart()

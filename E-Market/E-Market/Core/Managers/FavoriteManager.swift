@@ -31,7 +31,6 @@ class FavoriteManager {
         saveCart(cart: currentCart)
         NotificationCenter.default.post(name: cartDidUpdateNotification, object: nil)
     }
-
     
     func removeFromFavorite(item: Product) {
         var currentCart = getFavorites()

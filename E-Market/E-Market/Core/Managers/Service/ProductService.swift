@@ -23,20 +23,14 @@ class ProductService: ProductServiceProtocol {
             return
         }
         
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard let data = data, error == nil else {
-                completion(.failure(error ?? NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Network error"])))
-                return
-            }
-            
-            do {
-                let decoder = JSONDecoder()
-                let products = try decoder.decode([Product].self, from: data)
+        NetworkManager.shared.fetch(url: url, responseType: [Product].self) { result in
+            switch result {
+            case .success(let products):
                 completion(.success(products))
-            } catch {
+            case .failure(let error):
                 completion(.failure(error))
             }
-        }.resume()
+        }
     }
     
     func searchProducts(query: String, completion: @escaping (Result<[Product], Error>) -> Void) {
@@ -63,20 +57,13 @@ class ProductService: ProductServiceProtocol {
             return
         }
         
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard let data = data, error == nil else {
-                completion(.failure(error ?? NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Network error"])))
-                return
-            }
-            
-            do {
-                let decoder = JSONDecoder()
-                let products = try decoder.decode([Product].self, from: data)
+        NetworkManager.shared.fetch(url: url, responseType: [Product].self) { result in
+            switch result {
+            case .success(let products):
                 completion(.success(products))
-            } catch {
+            case .failure(let error):
                 completion(.failure(error))
             }
-        }.resume()
+        }
     }
 }
-
