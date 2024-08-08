@@ -11,7 +11,7 @@ protocol DetailViewControllerDelegate: AnyObject {
     func didUpdateCart()
 }
 
-class DetailViewController: UIViewController, DetailViewModelDelegate, DetailViewDelegate {
+final class DetailViewController: UIViewController, DetailViewModelDelegate, DetailViewDelegate {
     
     let detailView = DetailView()
     private var viewModel: DetailViewModel!

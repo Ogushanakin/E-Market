@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FavoritesViewController: UIViewController {
+final class FavoritesViewController: UIViewController {
     
     private let viewModel = FavoritesViewModel()
     private let favoritesView = FavoritesView()

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class HomeViewModel {
+final class HomeViewModel {
     private let productService: ProductServiceProtocol
     var homeModels: [Product] = []
     var sortOption: String?

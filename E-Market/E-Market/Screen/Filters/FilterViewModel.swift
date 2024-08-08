@@ -12,7 +12,7 @@ protocol FilterViewModelProtocol: AnyObject {
     func fetchBrands(completion: @escaping (Result<Void, Error>) -> Void)
 }
 
-class FilterViewModel: FilterViewModelProtocol {
+final class FilterViewModel: FilterViewModelProtocol {
     private let productService: ProductServiceProtocol
     private(set) var brands: [String] = []
     

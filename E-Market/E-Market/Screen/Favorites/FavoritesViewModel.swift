@@ -7,7 +7,7 @@
 
 import Foundation
 
-class FavoritesViewModel {
+final class FavoritesViewModel {
     
     // MARK: - Properties
     private let favoriteManager = FavoriteManager.shared

@@ -11,7 +11,7 @@ protocol DetailViewDelegate: AnyObject {
     func didTapBackButton()
 }
 
-class DetailView: UIView {
+final class DetailView: UIView {
     
     weak var delegate: DetailViewDelegate?
     

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CartViewController: UIViewController {
+final class CartViewController: UIViewController {
     
     var viewModel = CartViewModel()
     let cartView = CartView()

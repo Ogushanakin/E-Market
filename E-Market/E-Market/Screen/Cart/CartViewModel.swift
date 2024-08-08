@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CartViewModel {
+final class CartViewModel {
     
     // MARK: - Properties
     private let cartManager = CartManager.shared

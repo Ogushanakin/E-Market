@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FavoriteProductTableViewCell: UITableViewCell {
+final class FavoriteProductTableViewCell: UITableViewCell {
 
     private let nameLabel: UILabel = {
         let label = UILabel()

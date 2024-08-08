@@ -13,7 +13,7 @@ protocol ProductCollectionViewCellDelegate: AnyObject {
     func didSelectFavorite(cell: ProductCollectionViewCell)
 }
 
-class ProductCollectionViewCell: UICollectionViewCell {
+final class ProductCollectionViewCell: UICollectionViewCell {
     
     static let reuseIdentifier = "ProductCell"
     

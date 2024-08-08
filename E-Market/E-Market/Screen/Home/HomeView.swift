@@ -12,7 +12,7 @@ protocol HomeViewDelegate: AnyObject {
     func didSelectProduct(_ product: Product)
 }
 
-class HomeView: UIView {
+final class HomeView: UIView {
     weak var delegate: HomeViewDelegate?
     
     let emptyView: UILabel = {

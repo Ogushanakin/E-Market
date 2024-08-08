@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FilterTableViewCell: UITableViewCell {
+final class FilterTableViewCell: UITableViewCell {
 
     private let nameLabel: UILabel = {
         let label = UILabel()

@@ -12,7 +12,7 @@ protocol FilterViewControllerDelegate: AnyObject {
     func didSelectBrands(_ selectedBrands: [String])
 }
 
-class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+final class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
     weak var delegate: FilterViewControllerDelegate?
     private let viewModel: FilterViewModelProtocol

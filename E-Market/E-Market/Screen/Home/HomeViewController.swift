@@ -8,7 +8,7 @@
 import UIKit
 import UIScrollView_InfiniteScroll
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
     
     internal let homeView = HomeView()
     internal var homeViewModel: HomeViewModel!

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CartView: UIView {
+final class CartView: UIView {
     
     // MARK: - UI Components
     let headerView: HeaderView = {
