@@ -26,6 +26,10 @@ class CartViewModel {
         onCartUpdated?()
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     func getTotalPrice() -> String {
         let total = cartItems.reduce(0.0) { result, item in
             guard let price = Double(item.price ?? "0") else { return result }

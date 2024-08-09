@@ -28,6 +28,7 @@ class HomeViewControllerTests: XCTestCase {
     }
 
     func testFetchMoreDataSuccess() {
+        // Given
         let expectedProducts = [Product(
             createdAt: nil,
             name: "Test Product",
@@ -42,12 +43,32 @@ class HomeViewControllerTests: XCTestCase {
         mockProductService.shouldReturnError = false
         mockProductService.productsToReturn = expectedProducts
 
+        // When
         let expectation = self.expectation(description: "Fetch more products")
         viewController.triggerFetchMoreDataForTesting {
             expectation.fulfill()
         }
         waitForExpectations(timeout: 5.0, handler: nil)
 
+        // Then
         XCTAssertEqual(viewController.homeView.collectionView.numberOfItems(inSection: 0), expectedProducts.count)
     }
+
+    func testFetchMoreDataFailure() {
+        // Given
+        mockProductService.shouldReturnError = true
+        mockProductService.productsToReturn = []
+
+        // When
+        let expectation = self.expectation(description: "Fetch more products")
+        viewController.triggerFetchMoreDataForTesting {
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5.0, handler: nil)
+
+        // Then
+        XCTAssertEqual(viewController.homeView.collectionView.numberOfItems(inSection: 0), 0)
+
+    }
+
 }

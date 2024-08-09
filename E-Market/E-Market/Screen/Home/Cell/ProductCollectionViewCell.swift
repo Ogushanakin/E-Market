@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import SDWebImage
+import SDWebImage //NSCache
 
 protocol ProductCollectionViewCellDelegate: AnyObject {
     func didSelectAddToCart(cell: ProductCollectionViewCell)

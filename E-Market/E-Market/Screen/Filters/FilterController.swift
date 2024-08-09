@@ -148,10 +148,11 @@ final class FilterViewController: UIViewController, UITableViewDelegate, UITable
         viewModel.fetchBrands { [weak self] result in
             switch result {
             case .success:
-                self?.brands = self?.viewModel.brands ?? []
-                self?.filteredBrands = self?.brands ?? []
+                guard let self = self else { return }
+                self.brands = self.viewModel.brands
+                self.filteredBrands = self.brands
                 DispatchQueue.main.async {
-                    self?.brandTableView.reloadData()
+                    self.brandTableView.reloadData()
                 }
             case .failure(let error):
                 print("Failed to fetch brands: \(error.localizedDescription)")

@@ -7,12 +7,6 @@
 
 import Foundation
 
-protocol ProductServiceProtocol {
-    func fetchMoreProducts(completion: @escaping (Result<[Product], Error>) -> Void)
-    func searchProducts(query: String, completion: @escaping (Result<[Product], Error>) -> Void)
-    func fetchAllProducts(completion: @escaping (Result<[Product], Error>) -> Void)
-}
-
 class MockProductService: ProductServiceProtocol {
     var shouldReturnError = false
     var productsToReturn: [Product] = []

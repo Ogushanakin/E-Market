@@ -269,7 +269,6 @@
 				214CC81F2C619DFD002ED61D /* Service */,
 				214CC8072C61550E002ED61D /* CartManager.swift */,
 				214CC8232C61F1F3002ED61D /* FavoriteManager.swift */,
-				214CC81D2C619C10002ED61D /* NetworkManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -335,6 +334,7 @@
 		214CC81F2C619DFD002ED61D /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				214CC81D2C619C10002ED61D /* NetworkManager.swift */,
 				214CC7E12C613A06002ED61D /* ProductService.swift */,
 				214CC83B2C621189002ED61D /* MockProductService.swift */,
 			);

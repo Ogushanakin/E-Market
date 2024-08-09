@@ -18,7 +18,8 @@ final class FavoritesViewController: UIViewController {
         setupBindings()
         configureNavBar()
         viewModel.onFavoritesUpdated = { [weak self] in
-            self?.updateUI()
+            guard let self = self else { return }
+            self.updateUI()
         }
         updateUI()
 

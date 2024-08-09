@@ -18,7 +18,8 @@ final class CartViewController: UIViewController {
         setupBindings()
         configureNavBar()
         viewModel.onCartUpdated = { [weak self] in
-            self?.updateUI()
+            guard let self = self else { return }
+            self.updateUI()
         }
         updateUI()
     }
@@ -51,6 +52,9 @@ final class CartViewController: UIViewController {
         cartView.tableView.reloadData()
         let totalPrice = viewModel.getTotalPrice()
         cartView.updateTotalPrice(with: totalPrice)
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 

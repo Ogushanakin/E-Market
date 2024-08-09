@@ -40,15 +40,15 @@ class HomeViewModelTests: XCTestCase {
         )]
         mockProductService.shouldReturnError = false
         mockProductService.productsToReturn = expectedProducts
-
+        
         // When
         let expectation = self.expectation(description: "Fetch more products")
         viewModel.fetchMoreProducts { result in
             switch result {
             case .success:
-                XCTAssertEqual(self.viewModel.homeModels, expectedProducts)
+                XCTAssertEqual(self.viewModel.homeModels, expectedProducts) // Then
             case .failure:
-                XCTFail("Expected success but got failure")
+                XCTFail("Expected success but got failure") // Then
             }
             expectation.fulfill()
         }
@@ -76,9 +76,9 @@ class HomeViewModelTests: XCTestCase {
         viewModel.searchProducts(query: "Search") { result in
             switch result {
             case .success:
-                XCTAssertEqual(self.viewModel.homeModels, expectedProducts)
+                XCTAssertEqual(self.viewModel.homeModels, expectedProducts) // Then
             case .failure:
-                XCTFail("Expected success but got failure")
+                XCTFail("Expected success but got failure") // Then
             }
             expectation.fulfill()
         }

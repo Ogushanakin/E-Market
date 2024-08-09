@@ -99,7 +99,8 @@ final class HomeViewController: UIViewController {
     
     private func setupCartUpdateObserver() {
         cartUpdateObserver = NotificationCenter.default.addObserver(forName: CartManager.shared.cartDidUpdateNotification, object: nil, queue: .main) { [weak self] _ in
-            self?.updateBadgeValue()
+            guard let self = self else { return }
+            self.updateBadgeValue()
         }
     }
     
@@ -207,8 +208,9 @@ extension HomeViewController: UISearchBarDelegate {
             switch result {
             case .success:
                 DispatchQueue.main.async {
-                    self?.homeView.collectionView.reloadData()
-                    self?.updateEmptyView()
+                    guard let self = self else { return }
+                    self.homeView.collectionView.reloadData()
+                    self.updateEmptyView()
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
