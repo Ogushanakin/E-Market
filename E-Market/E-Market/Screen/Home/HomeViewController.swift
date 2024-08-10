@@ -49,7 +49,7 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupBindings() {
-        let productService: ProductServiceProtocol = ProductService.shared
+        let productService = ProductService()
         homeViewModel = HomeViewModel(productService: productService)
     }
     

@@ -14,16 +14,11 @@ protocol ProductServiceProtocol {
 }
 
 class ProductService: ProductServiceProtocol {
-    
-    static let shared = ProductService()
     private var currentPage = 0
     private let itemsPerPage = 4
     
-    public init() {}
-    
     func fetchMoreProducts(completion: @escaping (Result<[Product], Error>) -> Void) {
         currentPage += 1
-        
         guard let url = URL(string: "https://5fc9346b2af77700165ae514.mockapi.io/products?page=\(currentPage)&limit=\(itemsPerPage)") else {
             completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
             return
@@ -41,7 +36,6 @@ class ProductService: ProductServiceProtocol {
     
     func searchProducts(query: String, completion: @escaping (Result<[Product], Error>) -> Void) {
         currentPage = 0
-        
         guard let url = URL(string: "https://5fc9346b2af77700165ae514.mockapi.io/products?search=\(query)&limit=\(itemsPerPage)") else {
             completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
             return
