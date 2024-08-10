@@ -14,12 +14,10 @@ protocol CartManaging {
 }
 
 class CartManager: CartManaging {
-    static let shared = CartManager()
-    
     private let cartKey = "cart"
     let cartDidUpdateNotification = Notification.Name("CartDidUpdate")
     
-    private init() {}
+    init() {}
     
     var cartItems: [Product] {
         return getCart()

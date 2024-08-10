@@ -14,7 +14,8 @@ final class HomeViewController: UIViewController {
     internal var homeViewModel: HomeViewModel!
     private var isLoading = false
     private var cartUpdateObserver: NSObjectProtocol?
-
+    private let cartManager = CartManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -98,14 +99,14 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupCartUpdateObserver() {
-        cartUpdateObserver = NotificationCenter.default.addObserver(forName: CartManager.shared.cartDidUpdateNotification, object: nil, queue: .main) { [weak self] _ in
+        cartUpdateObserver = NotificationCenter.default.addObserver(forName: cartManager.cartDidUpdateNotification, object: nil, queue: .main) { [weak self] _ in
             guard let self = self else { return }
             self.updateBadgeValue()
         }
     }
     
     private func updateBadgeValue() {
-        let cartCount = CartManager.shared.cartItems.count
+        let cartCount = cartManager.cartItems.count
         if let tabBarItems = tabBarController?.tabBar.items, tabBarItems.indices.contains(1) {
             tabBarItems[1].badgeValue = cartCount > 0 ? "\(cartCount)" : nil
         }
@@ -224,7 +225,7 @@ extension HomeViewController: UISearchBarDelegate {
 // MARK: - Navigation
 extension HomeViewController {
     private func navigateToProductDetail(_ selectedProduct: Product) {
-        let isInCart = CartManager.shared.isProductInCart(selectedProduct)
+        let isInCart = cartManager.isProductInCart(selectedProduct)
         let viewModel = DetailViewModel(product: selectedProduct, isInCart: isInCart)
         let productDetailVC = DetailViewController(viewModel: viewModel)
         productDetailVC.delegate = self

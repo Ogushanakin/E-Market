@@ -27,6 +27,7 @@ class DetailViewModel {
     var productPrice: String { "\(product.price ?? "0")₺" }
     
     weak var delegate: DetailViewModelDelegate?
+    private let cartManager = CartManager()
     
     init(product: Product, isInCart: Bool) {
         self.product = product
@@ -37,9 +38,9 @@ class DetailViewModel {
         isInCart.toggle()
         
         if isInCart {
-            CartManager.shared.addToCart(item: product)
+            cartManager.addToCart(item: product)
         } else {
-            CartManager.shared.removeFromCart(item: product)
+            cartManager.removeFromCart(item: product)
         }
         
         delegate?.didUpdateButtonTitle(isInCart ? "Remove from Cart" : "Add to Cart")

@@ -15,6 +15,7 @@ final class DetailViewController: UIViewController, DetailViewModelDelegate, Det
     
     let detailView = DetailView()
     private var viewModel: DetailViewModel!
+    private let cartManager = CartManager()
     weak var delegate: DetailViewControllerDelegate?
     
     init(viewModel: DetailViewModel) {
@@ -34,7 +35,7 @@ final class DetailViewController: UIViewController, DetailViewModelDelegate, Det
         setupUI()
         setupBindings()
         configureNavBar()
-        NotificationCenter.default.addObserver(self, selector: #selector(cartDidUpdate), name: CartManager.shared.cartDidUpdateNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(cartDidUpdate), name: cartManager.cartDidUpdateNotification, object: nil)
     }
     
     private func setupUI() {

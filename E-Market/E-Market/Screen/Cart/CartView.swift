@@ -60,7 +60,8 @@ final class CartView: UIView {
         
         return view
     }()
-    
+    private let cartManager = CartManager()
+
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -129,6 +130,6 @@ final class CartView: UIView {
     }
     
     @objc private func completeButtonTapped() {
-        CartManager.shared.clearCart()
+        cartManager.clearCart()
     }
 }

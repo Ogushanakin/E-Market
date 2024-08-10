@@ -10,7 +10,7 @@ import Foundation
 class CartViewModel {
     
     // MARK: - Properties
-    private let cartManager = CartManager.shared
+    private let cartManager = CartManager()
     
     var cartItems: [Product] {
         return cartManager.cartItems

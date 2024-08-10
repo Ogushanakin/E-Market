@@ -9,6 +9,8 @@ import Foundation
 
 final class HomeViewModel {
     private let productService: ProductServiceProtocol
+    private let cartManager = CartManager()
+    private let favoriteManager = FavoriteManager()
     var homeModels: [Product] = []
     var sortOption: String?
     var filterBrands: [String] = []
@@ -18,21 +20,21 @@ final class HomeViewModel {
     }
     
     func addToCart(product: Product, completion: @escaping (Bool) -> Void) {
-        if CartManager.shared.isProductInCart(product) {
-            CartManager.shared.removeFromCart(item: product)
+        if cartManager.isProductInCart(product) {
+            cartManager.removeFromCart(item: product)
             completion(false)
         } else {
-            CartManager.shared.addToCart(item: product)
+            cartManager.addToCart(item: product)
             completion(true)
         }
     }
     
     func addToFavorites(product: Product, completion: @escaping (Bool) -> Void) {
-        if FavoriteManager.shared.isProductInFavorites(product) {
-            FavoriteManager.shared.removeFromFavorite(item: product)
+        if favoriteManager.isProductInFavorites(product) {
+            favoriteManager.removeFromFavorite(item: product)
             completion(false)
         } else {
-            FavoriteManager.shared.addToFavorite(item: product)
+            favoriteManager.addToFavorite(item: product)
             completion(true)
         }
     }

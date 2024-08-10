@@ -56,7 +56,9 @@ final class ProductCollectionViewCell: UICollectionViewCell {
     }()
     
     weak var delegate: ProductCollectionViewCellDelegate?
-    
+    private let cartManager = CartManager()
+    private let favoriteManager = FavoriteManager()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -119,8 +121,8 @@ final class ProductCollectionViewCell: UICollectionViewCell {
             productImageView.image = UIImage(named: "placeholder")
         }
         
-        updateButtonTitle(isInCart: CartManager.shared.isProductInCart(model!))
-        updateFavoriteButton(isFavorite: FavoriteManager.shared.isProductInFavorites(model!))
+        updateButtonTitle(isInCart: cartManager.isProductInCart(model!))
+        updateFavoriteButton(isFavorite: favoriteManager.isProductInFavorites(model!))
     }
     
     func updateButtonTitle(isInCart: Bool) {

@@ -50,6 +50,7 @@ final class ProductTableViewCell: UITableViewCell {
         return button
     }()
 
+    private let cartManager = CartManager()
     var product: Product?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -120,7 +121,7 @@ final class ProductTableViewCell: UITableViewCell {
     @objc private func increaseQuantity() {
         guard var product = product else { return }
         product.count += 1
-        CartManager.shared.addToCart(item: product)
+        cartManager.addToCart(item: product)
         configure(with: product) // Update with new data
     }
 
@@ -128,9 +129,9 @@ final class ProductTableViewCell: UITableViewCell {
         guard var product = product else { return }
         if product.count > 1 {
             product.count -= 1
-            CartManager.shared.removeFromCart(item: product)
+            cartManager.removeFromCart(item: product)
         } else {
-            CartManager.shared.removeFromCart(item: product)
+            cartManager.removeFromCart(item: product)
         }
         configure(with: product)
     }

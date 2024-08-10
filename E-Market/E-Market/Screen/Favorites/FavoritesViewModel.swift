@@ -10,7 +10,7 @@ import Foundation
 final class FavoritesViewModel {
     
     // MARK: - Properties
-    private let favoriteManager = FavoriteManager.shared
+    private let favoriteManager = FavoriteManager()
     
     var favoriteItems: [Product] {
         return favoriteManager.cartItems

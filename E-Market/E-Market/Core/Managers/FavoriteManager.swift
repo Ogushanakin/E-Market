@@ -7,14 +7,10 @@
 
 import CoreData
 
-class FavoriteManager {
-    static let shared = FavoriteManager()
-    
+class FavoriteManager {    
     private let cartKey = "favorites"
     let cartDidUpdateNotification = Notification.Name("FavoriteDidUpdate")
-    
-    private init() {}
-    
+        
     var cartItems: [Product] {
         return getFavorites()
     }
