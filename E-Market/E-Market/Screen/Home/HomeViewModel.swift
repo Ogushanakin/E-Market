@@ -9,14 +9,16 @@ import Foundation
 
 final class HomeViewModel {
     private let productService: ProductServiceProtocol
-    private let cartManager = CartManager()
-    private let favoriteManager = FavoriteManager()
+    internal let cartManager: CartManaging
+    private let favoriteManager: FavoriteManaging
     var homeModels: [Product] = []
     var sortOption: String?
     var filterBrands: [String] = []
     
-    init(productService: ProductServiceProtocol) {
+    init(productService: ProductServiceProtocol, cartManager: CartManaging, favoriteManager: FavoriteManaging) {
         self.productService = productService
+        self.cartManager = cartManager
+        self.favoriteManager = favoriteManager
     }
     
     func addToCart(product: Product, completion: @escaping (Bool) -> Void) {

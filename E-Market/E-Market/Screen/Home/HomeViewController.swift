@@ -14,7 +14,9 @@ final class HomeViewController: UIViewController {
     internal var homeViewModel: HomeViewModel!
     private var isLoading = false
     private var cartUpdateObserver: NSObjectProtocol?
+    
     private let cartManager = CartManager()
+    private let favoriteManager = FavoriteManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,7 +53,7 @@ final class HomeViewController: UIViewController {
     
     private func setupBindings() {
         let productService = ProductService()
-        homeViewModel = HomeViewModel(productService: productService)
+        homeViewModel = HomeViewModel(productService: productService, cartManager: cartManager, favoriteManager: favoriteManager)
     }
     
     private func updateEmptyView() {
@@ -225,7 +227,7 @@ extension HomeViewController: UISearchBarDelegate {
 // MARK: - Navigation
 extension HomeViewController {
     private func navigateToProductDetail(_ selectedProduct: Product) {
-        let isInCart = cartManager.isProductInCart(selectedProduct)
+        let isInCart = homeViewModel.cartManager.isProductInCart(selectedProduct)
         let viewModel = DetailViewModel(product: selectedProduct, isInCart: isInCart)
         let productDetailVC = DetailViewController(viewModel: viewModel)
         productDetailVC.delegate = self

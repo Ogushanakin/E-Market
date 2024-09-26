@@ -7,72 +7,69 @@
 
 import CoreData
 
-class FavoriteManager {    
-    private let cartKey = "favorites"
-    let cartDidUpdateNotification = Notification.Name("FavoriteDidUpdate")
-        
-    var cartItems: [Product] {
+protocol FavoriteManaging {
+    func addToFavorite(item: Product)
+    func removeFromFavorite(item: Product)
+    func clearFavorites()
+    func isProductInFavorites(_ product: Product) -> Bool
+    var favorites: [Product] { get }
+}
+
+class FavoriteManager: FavoriteManaging {
+    private let favoritesKey = "favorites"
+    let favoritesDidUpdateNotification = Notification.Name("FavoriteDidUpdate")
+    
+    var favorites: [Product] {
         return getFavorites()
     }
     
     func addToFavorite(item: Product) {
-        var currentCart = getFavorites()
-        if let index = currentCart.firstIndex(where: { $0.id == item.id }) {
-            currentCart[index].count += 1
-        } else {
-            var newItem = item
-            newItem.count = 1
-            currentCart.append(newItem)
+        var currentFavorites = getFavorites()
+        if !currentFavorites.contains(where: { $0.id == item.id }) {
+            currentFavorites.append(item)
+            saveFavorites(favorites: currentFavorites)
+            NotificationCenter.default.post(name: favoritesDidUpdateNotification, object: nil)
         }
-        saveCart(cart: currentCart)
-        NotificationCenter.default.post(name: cartDidUpdateNotification, object: nil)
     }
     
     func removeFromFavorite(item: Product) {
-        var currentCart = getFavorites()
-        if let index = currentCart.firstIndex(where: { $0.id == item.id }) {
-            if currentCart[index].count > 1 {
-                currentCart[index].count -= 1
-            } else {
-                currentCart.remove(at: index)
-            }
-            saveCart(cart: currentCart)
-            NotificationCenter.default.post(name: cartDidUpdateNotification, object: nil)
-        }
+        var currentFavorites = getFavorites()
+        currentFavorites.removeAll { $0.id == item.id }
+        saveFavorites(favorites: currentFavorites)
+        NotificationCenter.default.post(name: favoritesDidUpdateNotification, object: nil)
     }
     
-    func clearCart() {
-        saveCart(cart: [])
-        NotificationCenter.default.post(name: cartDidUpdateNotification, object: nil)
+    func clearFavorites() {
+        saveFavorites(favorites: [])
+        NotificationCenter.default.post(name: favoritesDidUpdateNotification, object: nil)
     }
     
     // MARK: - Private Methods
     
     private func getFavorites() -> [Product] {
-        if let data = UserDefaults.standard.data(forKey: cartKey) {
+        if let data = UserDefaults.standard.data(forKey: favoritesKey) {
             do {
                 let decoder = JSONDecoder()
-                let cart = try decoder.decode([Product].self, from: data)
-                return cart
+                let favorites = try decoder.decode([Product].self, from: data)
+                return favorites
             } catch {
-                print("Error decoding cart: \(error)")
+                print("Error decoding favorites: \(error)")
             }
         }
         return []
     }
     
-    private func saveCart(cart: [Product]) {
+    private func saveFavorites(favorites: [Product]) {
         do {
             let encoder = JSONEncoder()
-            let data = try encoder.encode(cart)
-            UserDefaults.standard.set(data, forKey: cartKey)
+            let data = try encoder.encode(favorites)
+            UserDefaults.standard.set(data, forKey: favoritesKey)
         } catch {
-            print("Error encoding cart: \(error)")
+            print("Error encoding favorites: \(error)")
         }
     }
     
     func isProductInFavorites(_ product: Product) -> Bool {
-        let currentCart = getFavorites()
-        return currentCart.contains { $0.id == product.id }
+        return getFavorites().contains { $0.id == product.id }
     }
 }

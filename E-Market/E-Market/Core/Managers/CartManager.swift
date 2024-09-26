@@ -10,7 +10,11 @@ import UIKit
 import CoreData
 
 protocol CartManaging {
+    func addToCart(item: Product)
+    func removeFromCart(item: Product)
     func clearCart()
+    func isProductInCart(_ product: Product) -> Bool
+    var cartItems: [Product] { get }
 }
 
 class CartManager: CartManaging {
